@@ -26,7 +26,7 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
             return;
         }
         var cafe = getCafe();
-        if(cafe.blockPos != null && cafe.blockPos.equals(worldPosition)){
+        if(cafe != null && cafe.blockPos != null && cafe.blockPos.equals(worldPosition)){
             cafe.tick(this);
         }else{
             uuid = null;
@@ -65,6 +65,6 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
     }
 
     public void getTooltip(List<Component> tooltip) {
-        tooltip.add(Component.literal("UUID: $uuid"));
+        tooltip.add(Component.literal("UUID: " + uuid));
     }
 }
