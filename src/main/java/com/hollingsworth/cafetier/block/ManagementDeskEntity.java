@@ -1,7 +1,7 @@
 package com.hollingsworth.cafetier.block;
 
 import com.hollingsworth.cafetier.api.Cafe;
-import com.hollingsworth.cafetier.api.CafeData;
+import com.hollingsworth.cafetier.api.CafeSavedData;
 import com.hollingsworth.cafetier.util.ITickable;
 import com.hollingsworth.cafetier.util.ITooltipProvider;
 import com.hollingsworth.cafetier.util.ModdedTile;
@@ -36,7 +36,7 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
 
     public void setCafe(UUID uuid){
         this.uuid = uuid;
-        var cafe = CafeData.from((ServerLevel) level).getCafe(uuid);
+        var cafe = CafeSavedData.from((ServerLevel) level).getCafe(uuid);
         if (cafe != null) {
             cafe.blockPos = worldPosition;
         }
@@ -45,7 +45,7 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
 
     public Cafe getCafe(){
         if(uuid != null && level instanceof ServerLevel serverLevel){
-            return CafeData.from(serverLevel).getCafe(uuid);
+            return CafeSavedData.from(serverLevel).getCafe(uuid);
         }
         return null;
     }

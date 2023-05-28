@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CafeData extends SavedData {
+public class CafeSavedData extends SavedData {
     private Map<UUID, Cafe> cafeMap = new HashMap<UUID, Cafe>();
 
-    public CafeData(){
+    public CafeSavedData(){
 
     }
 
@@ -26,7 +26,7 @@ public class CafeData extends SavedData {
         return tag;
     }
 
-    public CafeData(CompoundTag tag){
+    public CafeSavedData(CompoundTag tag){
         var cafes = tag.getList("CafeList", 10);
         for(int i = 0; i < cafes.size(); i++){
             var cafe = new Cafe(cafes.getCompound(i));
@@ -47,10 +47,10 @@ public class CafeData extends SavedData {
         return true;
     }
 
-    public static CafeData from(ServerLevel level){
+    public static CafeSavedData from(ServerLevel level){
         return level.getServer()
                 .overworld()
                 .getDataStorage()
-                .computeIfAbsent(CafeData::new, CafeData::new, "CAFE_DATA" );
+                .computeIfAbsent(CafeSavedData::new, CafeSavedData::new, "CAFE_DATA" );
     }
 }

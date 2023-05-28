@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Cafe {
     public UUID uuid;
     public BlockPos blockPos;
+    public CafeGame game = null;
 
     public Cafe(UUID uuid) {
         this.uuid = uuid;
@@ -29,6 +30,8 @@ public class Cafe {
     }
 
     public void tick(ManagementDeskEntity desk){
-
+        if(game != null){
+            game.tick();
+        }
     }
 }

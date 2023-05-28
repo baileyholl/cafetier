@@ -1,7 +1,7 @@
 package com.hollingsworth.cafetier.item;
 
 import com.hollingsworth.cafetier.api.Cafe;
-import com.hollingsworth.cafetier.api.CafeData;
+import com.hollingsworth.cafetier.api.CafeSavedData;
 import com.hollingsworth.cafetier.api.DeedData;
 import com.hollingsworth.cafetier.util.ModItem;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +24,7 @@ public class DeedItem extends ModItem {
         var deedData = new DeedData(pPlayer.getItemInHand(pUsedHand));
         if(pLevel instanceof ServerLevel serverLevel && deedData.getUuid() != null){
             deedData.setUuid(UUID.randomUUID());
-            CafeData.from(serverLevel).addCafe(new Cafe(deedData.getUuid()));
+            CafeSavedData.from(serverLevel).addCafe(new Cafe(deedData.getUuid()));
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }
