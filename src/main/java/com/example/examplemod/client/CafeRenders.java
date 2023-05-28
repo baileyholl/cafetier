@@ -23,7 +23,7 @@ public class CafeRenders {
 
 //
         event.registerEntityRenderer(CafeEntities.SEAT.get(), SeatRender::new);
-
+        event.registerEntityRenderer(CafeEntities.VILLAGER.get(), VillRenderer::new);
     }
     @SubscribeEvent
     public static void registerOverlays(final RegisterGuiOverlaysEvent event) {

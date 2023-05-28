@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -21,6 +22,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class SeatBlock extends Block {
     VoxelShape SEAT = box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
@@ -35,6 +38,7 @@ public class SeatBlock extends Block {
     public void fallOn(Level p_152426_, BlockState p_152427_, BlockPos p_152428_, Entity p_152429_, float p_152430_) {
         super.fallOn(p_152426_, p_152427_, p_152428_, p_152429_, p_152430_ * 0.5f);
     }
+
 
     @Override
     public void updateEntityAfterFallOn(BlockGetter reader, Entity entity) {
@@ -104,7 +108,37 @@ public class SeatBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState p_60503_, Level p_60504_, BlockPos p_60505_, Player p_60506_, InteractionHand p_60507_, BlockHitResult p_60508_) {
-        return super.use(p_60503_, p_60504_, p_60505_, p_60506_, p_60507_, p_60508_);
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if(pPlayer.isShiftKeyDown()){
+            return InteractionResult.PASS;
+        }
+        var seats = pLevel.getEntitiesOfClass(SeatEntity.class, new AABB(pPos));
+        if(!seats.isEmpty()){
+            var seat = seats.get(0);
+            var passengers = seat.getPassengers();
+            if(!passengers.isEmpty() && passengers.get(0) instanceof Player){
+                return InteractionResult.PASS;
+            }
+            if(!pLevel.isClientSide){
+                seat.ejectPassengers();
+                pPlayer.startRiding(seat);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        if(pLevel.isClientSide){
+            return InteractionResult.SUCCESS;
+        }
+        sitDown(pLevel, pPos, getLeashed(pPlayer).orElse(pPlayer));
+        return InteractionResult.SUCCESS;
+    }
+
+    public Optional<Entity> getLeashed(Player player){
+        var entities = player.level.getEntities(null, player.getBoundingBox().inflate(10));
+        for(Entity entity : entities){
+            if(entity instanceof Mob && ((Mob) entity).getLeashHolder() == player && canBePickedUp(entity)){
+                return Optional.of(entity);
+            }
+        }
+        return Optional.empty();
     }
 }

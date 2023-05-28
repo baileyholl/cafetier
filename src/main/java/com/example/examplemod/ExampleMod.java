@@ -54,7 +54,7 @@ public class ExampleMod
         CafeBlocks.BLOCK_ITEMS.register(modEventBus);
         CafeItems.ITEMS.register(modEventBus);
         CafeEntities.ENTITIES.register(modEventBus);
-
+        modEventBus.addListener(CafeEntities::registerAttributes);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
