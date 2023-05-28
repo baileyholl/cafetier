@@ -1,9 +1,11 @@
-package com.hollingsworth.cafetier.api.statemachine;
+package com.hollingsworth.cafetier.api.statemachine.cafe;
 
 import com.hollingsworth.cafetier.api.CafeGame;
+import com.hollingsworth.cafetier.api.statemachine.IState;
+import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import org.jetbrains.annotations.Nullable;
 
-public class GameSetupState implements IState{
+public class GameSetupState implements IState {
 
     public CafeGame game;
 
@@ -23,7 +25,7 @@ public class GameSetupState implements IState{
 
     @Override
     public IState tick() {
-        return null;
+        return new SpawnCustomerWavesState(game);
     }
 
     @Nullable

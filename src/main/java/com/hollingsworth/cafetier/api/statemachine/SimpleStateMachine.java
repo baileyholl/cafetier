@@ -3,7 +3,7 @@ package com.hollingsworth.cafetier.api.statemachine;
 import javax.annotation.Nonnull;
 
 public class SimpleStateMachine {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private IState currentState;
 
@@ -12,6 +12,7 @@ public class SimpleStateMachine {
         currentState.onStart();
         if(DEBUG){
             System.out.println("Starting state machine with state " + currentState.getClass().getSimpleName());
+            System.out.println("=====");
         }
     }
 
@@ -36,5 +37,9 @@ public class SimpleStateMachine {
         if (nextState != null) {
             changeState(nextState);
         }
+    }
+
+    public IState getCurrentState(){
+        return currentState;
     }
 }
