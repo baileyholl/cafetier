@@ -1,6 +1,7 @@
 package com.hollingsworth.cafetier.client;
 
 import com.hollingsworth.cafetier.Cafetier;
+import com.hollingsworth.cafetier.block.CafeBlocks;
 import com.hollingsworth.cafetier.entity.CafeEntities;
 import com.hollingsworth.cafetier.util.GuiEntityInfoHUD;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 public class CafeRenders {
     @SubscribeEvent
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-//        event.registerBlockEntityRenderer(BlockRegistry.ARCANE_PEDESTAL_TILE.get(), ArcanePedestalRenderer::new);
+        event.registerBlockEntityRenderer(CafeBlocks.MANAGEMENT_DESK_ENTITY.get(), DeskRenderer::new);
 
 //
         event.registerEntityRenderer(CafeEntities.SEAT.get(), SeatRender::new);

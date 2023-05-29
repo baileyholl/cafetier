@@ -17,7 +17,7 @@ public class CafeEntities {
     public static final RegistryObject<EntityType<SeatEntity>> SEAT = registerEntity("seat",
             EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC).sized(0.25f, 0.35f));
     public static final RegistryObject<EntityType<VillagerCustomer>> VILLAGER = registerEntity("villager",
-            EntityType.Builder.of(VillagerCustomer::new, MobCategory.CREATURE).sized(0.6f, 1.8f));
+            EntityType.Builder.<VillagerCustomer>of(VillagerCustomer::new, MobCategory.CREATURE).sized(0.6f, 1.8f));
     static <T extends Entity> RegistryObject<EntityType<T>> registerEntity(String name, EntityType.Builder<T> builder) {
         return ENTITIES.register(name, () -> builder.build(Cafetier.MODID + ":" + name));
     }

@@ -60,7 +60,6 @@ public class SeatEntity extends Entity implements IEntityAdditionalSpawnData {
         return super.getDismountLocationForPassenger(pPassenger).add(0, 0.5, 0);
     }
 
-    @Override
     public void positionRider(Entity pEntity, MoveFunction pCallback) {
         if(!this.hasPassenger(pEntity)){
             return;

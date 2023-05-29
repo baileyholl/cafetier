@@ -1,8 +1,14 @@
 package com.hollingsworth.cafetier.api.statemachine.cafe;
 
 import com.hollingsworth.cafetier.api.CafeGame;
+import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
+import com.hollingsworth.cafetier.entity.Customer;
+import com.hollingsworth.cafetier.entity.VillagerCustomer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnCustomerWavesState implements IState {
@@ -49,6 +55,18 @@ public class SpawnCustomerWavesState implements IState {
     public void spawnCustomer(){
         ticksToNextSpawn = getNextTickSpawn();
         numSpawned++;
+        BlockPos spawnPos = cafeGame.findRandomSpawnPos(cafeGame.getLevel(), cafeGame.getCafePos(), 1, 1);
+        if(spawnPos == null){
+            System.out.println("no spawn found");
+            return;
+        }
+        Customer customer = new VillagerCustomer(cafeGame.desk.getLevel(), spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+        cafeGame.desk.getLevel().addFreshEntity(customer);
+        customer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 20 * 30));
+        // print distance between desk and customer
+        System.out.println("distance: " + Math.sqrt(cafeGame.getCafePos().distSqr(spawnPos)));
+        System.out.println(customer.getOnPos());
+        cafeGame.onGameEvent(new CustomerSpawnedEvent(customer));
     }
 
     public int getNextTickSpawn(){

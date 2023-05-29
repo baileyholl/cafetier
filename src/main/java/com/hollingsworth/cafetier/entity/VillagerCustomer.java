@@ -9,8 +9,16 @@ import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.level.Level;
 
 public class VillagerCustomer extends Customer implements VillagerDataHolder {
-    protected VillagerCustomer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
+    public VillagerCustomer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    public VillagerCustomer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel, double x, double y, double z) {
+        super(pEntityType, pLevel, x, y, z);
+    }
+
+    public VillagerCustomer(Level level, double x, double y, double z) {
+        super(CafeEntities.VILLAGER.get(), level, x, y, z);
     }
 
     @Override
