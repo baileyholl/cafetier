@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
         if(level.isClientSide()) {
             return;
         }
+
         var cafe = getCafe();
         if(cafe != null && cafe.deskPos != null && cafe.deskPos.equals(worldPosition)){
             cafe.tick(this);
@@ -68,4 +70,8 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
         tooltip.add(Component.literal("UUID: " + uuid));
     }
 
+    @Override
+    public AABB getRenderBoundingBox() {
+        return super.getRenderBoundingBox().inflate(5);
+    }
 }

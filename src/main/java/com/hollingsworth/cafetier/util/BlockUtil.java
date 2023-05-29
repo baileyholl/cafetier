@@ -376,12 +376,10 @@ public class BlockUtil {
     }
 
     public static double boxDistance(AABB box1, AABB box2) {
-        double x1 = box1.minX + (box1.maxX - box1.minX) / 2.0D;
-        double y1 = box1.minY + (box1.maxY - box1.minY) / 2.0D;
-        double z1 = box1.minZ + (box1.maxZ - box1.minZ) / 2.0D;
-        double x2 = box2.minX + (box2.maxX - box2.minX) / 2.0D;
-        double y2 = box2.minY + (box2.maxY - box2.minY) / 2.0D;
-        double z2 = box2.minZ + (box2.maxZ - box2.minZ) / 2.0D;
-        return Math.sqrt(Math.pow(x1 - x2, 2.0D) + Math.pow(y1 - y2, 2.0D) + Math.pow(z1 - z2, 2.0D));
+        // Calculate the minimum distance between the two axis aligned bounding boxes
+        double x = Math.max(0, Math.max(box1.minX - box2.maxX, box2.minX - box1.maxX));
+        double y = Math.max(0, Math.max(box1.minY - box2.maxY, box2.minY - box1.maxY));
+        double z = Math.max(0, Math.max(box1.minZ - box2.maxZ, box2.minZ - box1.maxZ));
+        return Math.sqrt(x * x + y * y + z * z);
     }
 }
