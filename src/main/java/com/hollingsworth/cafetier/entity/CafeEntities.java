@@ -24,7 +24,7 @@ public class CafeEntities {
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(VILLAGER.get(), Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, Attributes.MOVEMENT_SPEED.getDefaultValue())
-                .add(Attributes.MAX_HEALTH, 20.0).build());
+                .add(Attributes.MAX_HEALTH, 20.0).add(Attributes.FOLLOW_RANGE, 48.0D).build());
     }
 
 }

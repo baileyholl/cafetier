@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.entity;
 
+import com.hollingsworth.cafetier.api.Cafe;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.npc.VillagerData;
@@ -13,12 +14,12 @@ public class VillagerCustomer extends Customer implements VillagerDataHolder {
         super(pEntityType, pLevel);
     }
 
-    public VillagerCustomer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel, double x, double y, double z) {
-        super(pEntityType, pLevel, x, y, z);
+    public VillagerCustomer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel, double x, double y, double z, Cafe cafe) {
+        super(pEntityType, pLevel, x, y, z, cafe);
     }
 
-    public VillagerCustomer(Level level, double x, double y, double z) {
-        super(CafeEntities.VILLAGER.get(), level, x, y, z);
+    public VillagerCustomer(Level level, double x, double y, double z, Cafe cafe) {
+        super(CafeEntities.VILLAGER.get(), level, x, y, z, cafe);
     }
 
     @Override

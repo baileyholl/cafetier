@@ -36,10 +36,9 @@ public class CustomerSpawners {
             }
             AABB cafeBounds = cafe.getBounds();
             AABB spawnerBounds = new AABB(entity.getBlockPos());
-
+            System.out.println(BlockUtil.boxDistance(cafeBounds, spawnerBounds));
             if(!cafeBounds.intersects(spawnerBounds)
                     && BlockUtil.boxDistance(cafeBounds, spawnerBounds) >= distance){
-                System.out.println(BlockUtil.boxDistance(cafeBounds, spawnerBounds));
                 spawners.add(p);
             }
         }

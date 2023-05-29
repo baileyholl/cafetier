@@ -382,4 +382,8 @@ public class BlockUtil {
         double z = Math.max(0, Math.max(box1.minZ - box2.maxZ, box2.minZ - box1.maxZ));
         return Math.sqrt(x * x + y * y + z * z);
     }
+
+    public static double distanceBetween(BlockPos blockPos, BlockPos blockPos2) {
+        return Math.sqrt(Math.pow(blockPos.getX() - blockPos2.getX(), 2) + Math.pow(blockPos.getY() - blockPos2.getY(), 2) + Math.pow(blockPos.getZ() - blockPos2.getZ(), 2));
+    }
 }

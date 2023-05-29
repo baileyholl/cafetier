@@ -20,7 +20,7 @@ public class SpawnCustomerWavesState implements IState {
 
     public SpawnCustomerWavesState(CafeGame cafeGame) {
         this.cafeGame = cafeGame;
-        maxSpawns = 3;
+        maxSpawns = 1;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SpawnCustomerWavesState implements IState {
             System.out.println("no spawn found");
             return;
         }
-        Customer customer = new VillagerCustomer(cafeGame.desk.getLevel(), spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5);
+        Customer customer = new VillagerCustomer(cafeGame.desk.getLevel(), spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, cafeGame.cafe);
         cafeGame.desk.getLevel().addFreshEntity(customer);
         customer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 20 * 30));
         // print distance between desk and customer

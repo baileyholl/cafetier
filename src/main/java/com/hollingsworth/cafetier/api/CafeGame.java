@@ -29,7 +29,7 @@ public class CafeGame {
         this.cafe = cafe;
         this.desk = desk;
         gameSm = new SimpleStateMachine(new GameSetupState(this));
-        maxWave = 2;
+        maxWave = 1;
         spawnPos = getValidSpawnPos((ServerLevel) desk.getLevel(), desk.getBlockPos());
     }
 
