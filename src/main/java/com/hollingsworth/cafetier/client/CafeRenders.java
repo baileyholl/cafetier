@@ -1,9 +1,9 @@
 package com.hollingsworth.cafetier.client;
 
 import com.hollingsworth.cafetier.Cafetier;
-import com.hollingsworth.cafetier.common.entity.block.CafeBlocks;
+import com.hollingsworth.cafetier.common.block.CafeBlocks;
 import com.hollingsworth.cafetier.common.entity.CafeEntities;
-import com.hollingsworth.cafetier.common.entity.util.GuiEntityInfoHUD;
+import com.hollingsworth.cafetier.common.util.GuiEntityInfoHUD;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;

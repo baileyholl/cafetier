@@ -1,8 +1,8 @@
-package com.hollingsworth.cafetier.common.entity.block;
+package com.hollingsworth.cafetier.common.block;
 
 import com.hollingsworth.cafetier.api.DeedData;
-import com.hollingsworth.cafetier.common.entity.item.DeedItem;
-import com.hollingsworth.cafetier.common.entity.util.ITickableBlock;
+import com.hollingsworth.cafetier.common.item.DeedItem;
+import com.hollingsworth.cafetier.common.util.ITickableBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.common.entity.util;
+package com.hollingsworth.cafetier.common.util;
 
 
 import com.google.common.hash.Hashing;

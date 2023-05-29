@@ -1,6 +1,6 @@
 package com.hollingsworth.cafetier.api;
 
-import com.hollingsworth.cafetier.common.entity.util.ItemstackData;
+import com.hollingsworth.cafetier.common.util.ItemstackData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 

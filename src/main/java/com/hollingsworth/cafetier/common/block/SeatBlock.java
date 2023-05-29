@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.common.entity.block;
+package com.hollingsworth.cafetier.common.block;
 
 import com.hollingsworth.cafetier.common.entity.SeatEntity;
 import net.minecraft.core.BlockPos;

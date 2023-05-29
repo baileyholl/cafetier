@@ -1,7 +1,7 @@
 package com.hollingsworth.cafetier.api;
 
-import com.hollingsworth.cafetier.common.entity.block.CustomerSpawnerEntity;
-import com.hollingsworth.cafetier.common.entity.util.BlockUtil;
+import com.hollingsworth.cafetier.common.block.CustomerSpawnerEntity;
+import com.hollingsworth.cafetier.common.util.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;

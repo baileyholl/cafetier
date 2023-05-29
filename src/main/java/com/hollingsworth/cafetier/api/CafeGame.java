@@ -4,7 +4,7 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameSetupState;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameTeardownState;
-import com.hollingsworth.cafetier.common.entity.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 

@@ -3,7 +3,7 @@ package com.hollingsworth.cafetier.api.statemachine.customer;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
-import com.hollingsworth.cafetier.common.entity.util.BlockUtil;
+import com.hollingsworth.cafetier.common.util.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.Nullable;

@@ -1,8 +1,8 @@
 package com.hollingsworth.cafetier;
 
-import com.hollingsworth.cafetier.common.entity.block.CafeBlocks;
+import com.hollingsworth.cafetier.common.block.CafeBlocks;
 import com.hollingsworth.cafetier.common.entity.CafeEntities;
-import com.hollingsworth.cafetier.common.entity.item.CafeItems;
+import com.hollingsworth.cafetier.common.item.CafeItems;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;

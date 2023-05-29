@@ -1,6 +1,6 @@
-package com.hollingsworth.cafetier.common.entity.util;
+package com.hollingsworth.cafetier.common.util;
 
-import com.hollingsworth.cafetier.common.entity.item.CafeItems;
+import com.hollingsworth.cafetier.common.item.CafeItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

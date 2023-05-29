@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.common.entity.util;
+package com.hollingsworth.cafetier.common.util;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;

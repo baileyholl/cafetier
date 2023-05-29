@@ -1,8 +1,8 @@
-package com.hollingsworth.cafetier.common.entity.block;
+package com.hollingsworth.cafetier.common.block;
 
 import com.hollingsworth.cafetier.api.CustomerSpawners;
-import com.hollingsworth.cafetier.common.entity.util.ITickable;
-import com.hollingsworth.cafetier.common.entity.util.ModdedTile;
+import com.hollingsworth.cafetier.common.util.ITickable;
+import com.hollingsworth.cafetier.common.util.ModdedTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 

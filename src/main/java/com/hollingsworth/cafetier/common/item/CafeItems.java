@@ -1,7 +1,7 @@
-package com.hollingsworth.cafetier.common.entity.item;
+package com.hollingsworth.cafetier.common.item;
 
 import com.hollingsworth.cafetier.Cafetier;
-import com.hollingsworth.cafetier.common.entity.block.RegistryWrapper;
+import com.hollingsworth.cafetier.common.block.RegistryWrapper;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
