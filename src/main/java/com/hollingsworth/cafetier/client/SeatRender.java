@@ -1,6 +1,6 @@
 package com.hollingsworth.cafetier.client;
 
-import com.hollingsworth.cafetier.entity.SeatEntity;
+import com.hollingsworth.cafetier.common.entity.SeatEntity;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

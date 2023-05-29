@@ -1,9 +1,9 @@
-package com.hollingsworth.cafetier.item;
+package com.hollingsworth.cafetier.common.entity.item;
 
 import com.hollingsworth.cafetier.api.Cafe;
 import com.hollingsworth.cafetier.api.CafeSavedData;
 import com.hollingsworth.cafetier.api.DeedData;
-import com.hollingsworth.cafetier.util.ModItem;
+import com.hollingsworth.cafetier.common.entity.util.ModItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;

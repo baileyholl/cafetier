@@ -1,10 +1,10 @@
-package com.hollingsworth.cafetier.block;
+package com.hollingsworth.cafetier.common.entity.block;
 
 import com.hollingsworth.cafetier.api.Cafe;
 import com.hollingsworth.cafetier.api.CafeSavedData;
-import com.hollingsworth.cafetier.util.ITickable;
-import com.hollingsworth.cafetier.util.ITooltipProvider;
-import com.hollingsworth.cafetier.util.ModdedTile;
+import com.hollingsworth.cafetier.common.entity.util.ITickable;
+import com.hollingsworth.cafetier.common.entity.util.ITooltipProvider;
+import com.hollingsworth.cafetier.common.entity.util.ModdedTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

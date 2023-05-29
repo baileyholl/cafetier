@@ -1,6 +1,6 @@
 package com.hollingsworth.cafetier.client;
 
-import com.hollingsworth.cafetier.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.entity.block.ManagementDeskEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;

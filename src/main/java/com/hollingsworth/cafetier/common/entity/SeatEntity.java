@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.entity;
+package com.hollingsworth.cafetier.common.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

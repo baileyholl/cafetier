@@ -1,6 +1,6 @@
 package com.hollingsworth.cafetier.client;
 
-import com.hollingsworth.cafetier.entity.VillagerCustomer;
+import com.hollingsworth.cafetier.common.entity.VillagerCustomer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

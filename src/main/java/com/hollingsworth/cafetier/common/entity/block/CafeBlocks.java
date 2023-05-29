@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.block;
+package com.hollingsworth.cafetier.common.entity.block;
 
 import com.hollingsworth.cafetier.Cafetier;
 import net.minecraft.world.item.BlockItem;

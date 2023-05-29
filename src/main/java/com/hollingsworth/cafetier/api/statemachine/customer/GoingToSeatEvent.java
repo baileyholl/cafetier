@@ -2,7 +2,7 @@ package com.hollingsworth.cafetier.api.statemachine.customer;
 
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.entity.Customer;
+import com.hollingsworth.cafetier.common.entity.Customer;
 import org.jetbrains.annotations.Nullable;
 
 public class GoingToSeatEvent implements IState {

@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.block;
+package com.hollingsworth.cafetier.common.entity.block;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;

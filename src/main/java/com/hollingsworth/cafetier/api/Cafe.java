@@ -1,7 +1,7 @@
 package com.hollingsworth.cafetier.api;
 
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.entity.block.ManagementDeskEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.AABB;

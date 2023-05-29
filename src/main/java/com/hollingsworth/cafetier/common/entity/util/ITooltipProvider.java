@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.util;
+package com.hollingsworth.cafetier.common.entity.util;
 
 import net.minecraft.network.chat.Component;
 

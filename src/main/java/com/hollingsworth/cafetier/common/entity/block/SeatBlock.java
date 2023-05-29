@@ -1,6 +1,6 @@
-package com.hollingsworth.cafetier.block;
+package com.hollingsworth.cafetier.common.entity.block;
 
-import com.hollingsworth.cafetier.entity.SeatEntity;
+import com.hollingsworth.cafetier.common.entity.SeatEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

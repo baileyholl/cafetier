@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.util;
+package com.hollingsworth.cafetier.common.entity.util;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;

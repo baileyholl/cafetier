@@ -3,7 +3,7 @@ package com.hollingsworth.cafetier.api;
 import com.hollingsworth.cafetier.api.game_events.CustomerLostEvent;
 import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.entity.Customer;
+import com.hollingsworth.cafetier.common.entity.Customer;
 
 import java.util.ArrayList;
 import java.util.List;

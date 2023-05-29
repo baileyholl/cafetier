@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.entity;
+package com.hollingsworth.cafetier.common.entity;
 
 import com.hollingsworth.cafetier.api.Cafe;
 import com.hollingsworth.cafetier.api.statemachine.EmptyState;

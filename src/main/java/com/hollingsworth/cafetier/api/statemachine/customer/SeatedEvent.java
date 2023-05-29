@@ -1,7 +1,7 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.entity.Customer;
+import com.hollingsworth.cafetier.common.entity.Customer;
 import net.minecraft.core.BlockPos;
 
 public class SeatedEvent implements IStateEvent {

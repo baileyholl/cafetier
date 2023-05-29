@@ -1,6 +1,6 @@
-package com.hollingsworth.cafetier.block;
+package com.hollingsworth.cafetier.common.entity.block;
 
-import com.hollingsworth.cafetier.util.ITickable;
+import com.hollingsworth.cafetier.common.entity.util.ITickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
