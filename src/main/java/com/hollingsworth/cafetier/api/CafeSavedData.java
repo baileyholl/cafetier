@@ -1,5 +1,7 @@
 package com.hollingsworth.cafetier.api;
 
+import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
@@ -40,6 +42,16 @@ public class CafeSavedData extends SavedData {
 
     public Cafe getCafe(UUID uuid){
         return cafeMap.get(uuid);
+    }
+
+    public Cafe getCafeByPos(ServerLevel level, BlockPos pos){
+        for(var cafe : cafeMap.values()){
+            if(level.getBlockEntity(cafe.deskPos) instanceof ManagementDeskEntity
+                && cafe.getBounds().contains(pos.getX(), pos.getY(), pos.getZ())){
+                return cafe;
+            }
+        }
+        return null;
     }
 
     @Override

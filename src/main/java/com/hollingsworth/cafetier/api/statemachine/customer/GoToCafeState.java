@@ -8,17 +8,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.Nullable;
 
-public class GoToCafeGoal implements IState {
+public class GoToCafeState implements IState {
     public Customer customer;
     public BlockPos targetPos;
 
-    public GoToCafeGoal(Customer customer) {
+    public GoToCafeState(Customer customer) {
         this.customer = customer;
     }
 
     @Override
     public void onStart() {
-        targetPos = customer.targetCafe.deskPos;
+        targetPos = customer.cafe.deskPos;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class GoToCafeGoal implements IState {
         Path path = customer.getNavigation().createPath(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1);
         customer.getNavigation().moveTo(path, 0.5);
         if(BlockUtil.distanceBetween(targetPos, customer.blockPosition()) < 2)
-            return new WaitForSeatingGoal(customer);
+            return new WaitForSeatingState(customer);
         return null;
     }
 

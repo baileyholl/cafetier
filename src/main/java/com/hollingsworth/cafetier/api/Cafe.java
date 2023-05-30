@@ -45,6 +45,10 @@ public class Cafe {
         }
     }
 
+    public CafeGame getGame(){
+        return game;
+    }
+
     public void postEvent(IStateEvent event){
         if(game != null){
             game.onGameEvent(event);

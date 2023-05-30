@@ -1,5 +1,7 @@
 package com.hollingsworth.cafetier.common.block;
 
+import com.hollingsworth.cafetier.api.game_events.CustomerSeatedEvent;
+import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.entity.SeatEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -41,38 +43,45 @@ public class SeatBlock extends Block {
 
     @Override
     public void updateEntityAfterFallOn(BlockGetter reader, Entity entity) {
-        var pos = entity.blockPosition();
-        if (entity instanceof Player
-                || !(entity instanceof LivingEntity)
-                || !canBePickedUp(entity)
-                || isSeatOccupied(entity.level, pos)) {
-            if (entity.isSuppressingBounce()) {
-                super.updateEntityAfterFallOn(reader, entity);
-                return;
-            }
-            var vec3 = entity.getDeltaMovement();
-            if (vec3.y < 0.0) {
-                var d0 = entity instanceof LivingEntity ? 1.0 : 0.8;
-                entity.setDeltaMovement(vec3.x, -vec3.y * 0.66 * d0, vec3.z);
-            }
-            return;
-        }
-        if (reader.getBlockState(pos).getBlock() != this) {
-            return;
-        }
-        sitDown(entity.level, pos, entity);
+//        var pos = entity.blockPosition();
+//        if (entity instanceof Player
+//                || !(entity instanceof LivingEntity)
+//                || !canBePickedUp(entity)
+//                || isSeatOccupied(entity.level, pos)) {
+//            if (entity.isSuppressingBounce()) {
+//                super.updateEntityAfterFallOn(reader, entity);
+//                return;
+//            }
+//            var vec3 = entity.getDeltaMovement();
+//            if (vec3.y < 0.0) {
+//                var d0 = entity instanceof LivingEntity ? 1.0 : 0.8;
+//                entity.setDeltaMovement(vec3.x, -vec3.y * 0.66 * d0, vec3.z);
+//            }
+//            return;
+//        }
+//        if (reader.getBlockState(pos).getBlock() != this) {
+//            return;
+//        }
+//        sitDown(entity.level, pos, entity);
     }
 
     public void sitDown(Level world, BlockPos pos, Entity entity){
-        if(world.isClientSide){
+        if(world.isClientSide || entity == null){
             return;
         }
+        System.out.println("sitting " + entity);
         var seat = new SeatEntity(world, pos);
         seat.setPos(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
         world.addFreshEntity(seat);
         entity.startRiding(seat, true);
         if (entity instanceof TamableAnimal tamableAnimal)
             tamableAnimal.setInSittingPose(true);
+        if(entity instanceof Customer customer){
+            customer.dropLeash(true, true);
+            if(customer.cafe.getGame() != null){
+                customer.cafe.getGame().onGameEvent(new CustomerSeatedEvent(customer, pos));
+            }
+        }
     }
 
     public boolean isSeatOccupied(Level world, BlockPos pos){
@@ -111,23 +120,23 @@ public class SeatBlock extends Block {
         if(pPlayer.isShiftKeyDown()){
             return InteractionResult.PASS;
         }
-        var seats = pLevel.getEntitiesOfClass(SeatEntity.class, new AABB(pPos));
-        if(!seats.isEmpty()){
-            var seat = seats.get(0);
-            var passengers = seat.getPassengers();
-            if(!passengers.isEmpty() && passengers.get(0) instanceof Player){
-                return InteractionResult.PASS;
-            }
-            if(!pLevel.isClientSide){
-                seat.ejectPassengers();
-                pPlayer.startRiding(seat);
-            }
-            return InteractionResult.SUCCESS;
-        }
+//        var seats = pLevel.getEntitiesOfClass(SeatEntity.class, new AABB(pPos));
+//        if(!seats.isEmpty()){
+//            var seat = seats.get(0);
+////            var passengers = seat.getPassengers();
+////            if(!passengers.isEmpty() && passengers.get(0) instanceof Player){
+////                return InteractionResult.PASS;
+////            }
+//            if(!pLevel.isClientSide){
+//                seat.ejectPassengers();
+////                pPlayer.startRiding(seat);
+//            }
+//            return InteractionResult.SUCCESS;
+//        }
         if(pLevel.isClientSide){
             return InteractionResult.SUCCESS;
         }
-        sitDown(pLevel, pPos, getLeashed(pPlayer).orElse(pPlayer));
+        sitDown(pLevel, pPos, getLeashed(pPlayer).orElse(null));
         return InteractionResult.SUCCESS;
     }
 
