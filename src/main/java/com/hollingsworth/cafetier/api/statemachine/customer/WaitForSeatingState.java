@@ -33,6 +33,9 @@ public class WaitForSeatingState implements IState {
     @Nullable
     @Override
     public IState onEvent(IStateEvent event) {
+        if(event instanceof InteractEvent interactEvent && customer.getLeashHolder() != interactEvent.player){
+            customer.setLeashedTo(interactEvent.player, true);
+        }
         if(event instanceof CustomerSeatedEvent customerSeatedEvent && customerSeatedEvent.customer == customer){
             customer.setCanBeSeated(false);
             return new WaitingToOrderState(customer);

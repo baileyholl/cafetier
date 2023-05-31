@@ -4,12 +4,11 @@ import com.hollingsworth.cafetier.common.entity.VillagerCustomer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.CrossedArmsItemLayer;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.resources.ResourceLocation;
 
-public class VillRenderer extends MobRenderer<VillagerCustomer, VillModel<VillagerCustomer>> {
+public class VillRenderer extends CustomerRenderer<VillagerCustomer, VillModel<VillagerCustomer>> {
     private static final ResourceLocation VILLAGER_BASE_SKIN = new ResourceLocation("textures/entity/villager/villager.png");
 
     public VillRenderer(EntityRendererProvider.Context p_174437_) {

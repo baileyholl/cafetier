@@ -5,14 +5,15 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitingToOrderState implements IState {
+public class EatingState implements IState {
 
-    public final Customer customer;
-    public int ticksWaited = 0;
-    public int ticksToWait = 0;
-    public WaitingToOrderState(Customer customer){
+    public Customer customer;
+    public int ticksEating;
+    public int ticksToEat;
+
+    public EatingState(Customer customer) {
         this.customer = customer;
-        ticksToWait = 60;
+        ticksToEat = 60;
     }
 
     @Override
@@ -28,9 +29,9 @@ public class WaitingToOrderState implements IState {
     @Nullable
     @Override
     public IState tick() {
-        ticksWaited++;
-        if(ticksWaited >= ticksToWait){
-            return new WaitingForFoodState(customer);
+        ticksEating++;
+        if (ticksEating >= ticksToEat) {
+            return new LeavingCafeState(customer);
         }
         return null;
     }

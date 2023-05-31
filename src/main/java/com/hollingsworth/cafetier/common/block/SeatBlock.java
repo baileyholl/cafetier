@@ -31,6 +31,7 @@ public class SeatBlock extends Block {
 
     // Static Block Shapes
     VoxelShape SEAT_COLLISION = box(0.0, 0.0, 0.0, 16.0, 6.0, 16.0);
+
     public SeatBlock(Properties p_49795_) {
         super(p_49795_);
     }

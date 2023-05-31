@@ -1,10 +1,11 @@
 package com.hollingsworth.cafetier.common.entity;
 
 import com.hollingsworth.cafetier.api.Cafe;
+import com.hollingsworth.cafetier.api.statemachine.CustomerSM;
 import com.hollingsworth.cafetier.api.statemachine.EmptyState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
 import com.hollingsworth.cafetier.api.statemachine.customer.GoToCafeState;
+import com.hollingsworth.cafetier.api.statemachine.customer.InteractEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,7 +27,8 @@ public class Customer extends PathfinderMob {
     public static final EntityDataAccessor<Integer> MAX_PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> SHOW_PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
 
-    public SimpleStateMachine brain = new SimpleStateMachine(EmptyState.INSTANCE);
+    public CustomerSM brain = new CustomerSM(EmptyState.INSTANCE, this);
+    public BlockPos spawnPos;
 
     public Customer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -36,7 +38,8 @@ public class Customer extends PathfinderMob {
         this(pEntityType, pLevel);
         this.setPos(x, y, z);
         this.cafe = cafe;
-        brain = new SimpleStateMachine(new GoToCafeState(this));
+        brain = new CustomerSM(new GoToCafeState(this), this);
+        spawnPos = new BlockPos(x, y, z);
     }
 
     public Customer(EntityType<? extends PathfinderMob> entityType, Level level, BlockPos spawnPos, Cafe cafe) {
@@ -57,14 +60,18 @@ public class Customer extends PathfinderMob {
         super.tick();
         if(!level.isClientSide) {
             brain.tick();
+            if(cafe == null){
+                this.remove(RemovalReason.DISCARDED);
+            }
         }
     }
 
     @Override
     protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         super.mobInteract(pPlayer, pHand);
-        if(getCanBeSeated()){
-            this.setLeashedTo(pPlayer, true);
+        if(!level.isClientSide){
+            InteractEvent event = new InteractEvent(pPlayer, pHand);
+            onEvent(event);
         }
         return InteractionResult.SUCCESS;
     }
@@ -86,7 +93,9 @@ public class Customer extends PathfinderMob {
     }
 
     public void onEvent(IStateEvent gameEvent){
-        brain.onEvent(gameEvent);
+        if(!level.isClientSide) {
+            brain.onEvent(gameEvent);
+        }
     }
 
     public void setCanBeSeated(boolean canBeSeated){

@@ -31,6 +31,9 @@ public class WaitingForFoodState implements IState {
     @Nullable
     @Override
     public IState onEvent(IStateEvent event) {
+        if(event instanceof InteractEvent event1 && customer.cafe.getGame().isStackOnMenu(event1.player.getMainHandItem())){
+            return new EatingState(customer);
+        }
         return null;
     }
 }

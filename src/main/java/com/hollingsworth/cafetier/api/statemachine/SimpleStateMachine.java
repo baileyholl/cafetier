@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 public class SimpleStateMachine {
     public static final boolean DEBUG = true;
 
-    private IState currentState;
+    protected IState currentState;
 
     public SimpleStateMachine(@Nonnull IState initialState) {
         currentState = initialState;
@@ -16,7 +16,7 @@ public class SimpleStateMachine {
         }
     }
 
-    private void changeState(@Nonnull IState nextState) {
+    protected void changeState(@Nonnull IState nextState) {
         if(DEBUG){
             System.out.println("Changing state from " + currentState.getClass().getSimpleName() + " to " + nextState.getClass().getSimpleName());
         }

@@ -7,6 +7,7 @@ import com.hollingsworth.cafetier.api.statemachine.cafe.GameTeardownState;
 import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,6 +45,10 @@ public class CafeGame {
 
     public BlockPos getCafePos(){
         return desk.getBlockPos();
+    }
+
+    public boolean isStackOnMenu(ItemStack stack){
+        return true;
     }
 
     public void onGameEvent(IStateEvent event){
