@@ -30,7 +30,7 @@ public class WaitingToOrderState implements IState {
     public IState tick() {
         ticksWaited++;
         if(ticksWaited >= ticksToWait){
-            return new WaitingForFoodState(customer);
+            return new WaitingForFoodState(customer, customer.cafe.getGame().menuStacks.get(customer.getRandom().nextInt(customer.cafe.getGame().menuStacks.size())));
         }
         return null;
     }

@@ -20,6 +20,7 @@ public class RecipeDatagen extends RecipeProvider {
 //    public static Ingredient SOURCE_GEM = Ingredient.of(ItemTagProvider.SOURCE_GEM_TAG);
 
     public Consumer<FinishedRecipe> consumer;
+
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         {

@@ -37,7 +37,7 @@ public class ManagementDesk extends Block implements ITickableBlock {
                 }
                 return InteractionResult.SUCCESS;
             }else if(tile.getCafe() != null){
-                tile.getCafe().startGame(tile);
+                tile.getCafe().startGame(tile, pPlayer);
             }
         }
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);

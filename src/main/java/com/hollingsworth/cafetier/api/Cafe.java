@@ -4,6 +4,8 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
 import java.util.UUID;
@@ -37,10 +39,10 @@ public class Cafe {
         }
     }
 
-    public void startGame(ManagementDeskEntity desk){
+    public void startGame(ManagementDeskEntity desk, Player player){
         game = new CafeGame(this, desk);
-        if(game.spawnPos == null){
-            System.out.println("null spawn pos");
+        if(game.spawnPos == null || game.menuStacks.isEmpty()){
+            player.sendSystemMessage(Component.literal("Invalid game setup"));
             game = null;
         }
     }

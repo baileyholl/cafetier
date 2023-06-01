@@ -1,10 +1,15 @@
 package com.hollingsworth.cafetier.data;
 
 import com.hollingsworth.cafetier.Cafetier;
+import com.hollingsworth.cafetier.common.block.CafeBlocks;
+import com.hollingsworth.cafetier.common.lib.BlockNames;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -18,6 +23,7 @@ public class BlockStatesDatagen extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
+
 //        registerOnlyState(BlockRegistry.SOURCE_GEM_BLOCK, LibBlockNames.SOURCE_GEM_BLOCK);
 //        registerOnlyState(BlockRegistry.RED_SBED, LibBlockNames.RED_SBED);
 //        registerOnlyState(BlockRegistry.BLUE_SBED, LibBlockNames.BLUE_SBED);
@@ -39,6 +45,25 @@ public class BlockStatesDatagen extends BlockStateProvider {
 //        registerNormalCube(BlockRegistry.FALSE_WEAVE, LibBlockNames.FALSE_WEAVE);
 //        registerNormalCube(BlockRegistry.GHOST_WEAVE, LibBlockNames.GHOST_WEAVE);
 //        registerNormalCube(BlockRegistry.MIRROR_WEAVE, LibBlockNames.MIRROR_WEAVE);
+        horizontalBlock(CafeBlocks.OAK_CHAIR.get(), getUncheckedModel(BlockNames.OAK_CHAIR));
+        registerOnlyState(CafeBlocks.PLATE_BLOCK.get(), BlockNames.PLATE_BLOCK);
+        registerOnlyState(CafeBlocks.DISPLAY_BLOCK.get(), BlockNames.DISPLAY_CASE);
+
+    }
+
+    private void horizontalOnly(Block block, String registry){
+        getVariantBuilder(block).forAllStates(state -> {
+            Direction facing = state.getValue(ButtonBlock.FACING);
+            AttachFace face = state.getValue(ButtonBlock.FACE);
+            boolean powered = state.getValue(ButtonBlock.POWERED);
+
+            return ConfiguredModel.builder()
+                    .modelFile(getUncheckedModel(registry))
+                    .rotationX(face == AttachFace.FLOOR ? 0 : (face == AttachFace.WALL ? 90 : 180))
+                    .rotationY((int) (face == AttachFace.CEILING ? facing : facing.getOpposite()).toYRot())
+                    .uvLock(face == AttachFace.WALL)
+                    .build();
+        });
     }
 
     private void registerOnlyState(Block block, String registry) {
@@ -62,7 +87,7 @@ public class BlockStatesDatagen extends BlockStateProvider {
     }
 
     public static ModelFile getUncheckedModel(String registry) {
-        return new ModelFile.UncheckedModelFile("ars_nouveau:block/" + registry);
+        return new ModelFile.UncheckedModelFile("cafetier:block/" + registry);
     }
 
     public void buildNormalCube(String registryName) {

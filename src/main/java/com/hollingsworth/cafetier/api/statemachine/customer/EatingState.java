@@ -31,7 +31,7 @@ public class EatingState implements IState {
     public IState tick() {
         ticksEating++;
         if (ticksEating >= ticksToEat) {
-            return new LeavingCafeState(customer);
+            return new WaitingToPayState(customer);
         }
         return null;
     }

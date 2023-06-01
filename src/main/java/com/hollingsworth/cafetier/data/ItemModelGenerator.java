@@ -3,6 +3,7 @@ package com.hollingsworth.cafetier.data;
 import com.google.common.base.Preconditions;
 import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.common.block.RegistryWrapper;
+import com.hollingsworth.cafetier.common.lib.BlockNames;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -24,11 +25,14 @@ public class ItemModelGenerator extends net.minecraftforge.client.model.generato
 //        blockAsItem(LibBlockNames.MENDOSTEEN_POD);
 //        itemUnchecked(ItemsRegistry.ALCHEMISTS_CROWN);
 //        stateUnchecked(LibBlockNames.POTION_DIFFUSER);
+        stateUnchecked(BlockNames.PLATE_BLOCK);
+        stateUnchecked(BlockNames.DISPLAY_CASE);
+        stateUnchecked(BlockNames.OAK_CHAIR);
 
     }
 
     public void blockAsItem(String s){
-        getBuilder("ars_nouveau:" + s).parent(new ModelFile.UncheckedModelFile("item/generated"))
+        getBuilder("cafetier:" + s).parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", itemTexture(s));
     }
 
@@ -50,7 +54,7 @@ public class ItemModelGenerator extends net.minecraftforge.client.model.generato
 
     @Override
     public String getName() {
-        return "Ars Nouveau Item Models";
+        return "cafetier Item Models";
     }
 
     private ResourceLocation registryName(final Item item) {
@@ -74,10 +78,4 @@ public class ItemModelGenerator extends net.minecraftforge.client.model.generato
         final ResourceLocation name = registryName(item);
         return new ResourceLocation(name.getNamespace(), "items" + "/" + name.getPath());
     }
-
-    private ResourceLocation spellTexture(final Item item) {
-        final ResourceLocation name = registryName(item);
-        return new ResourceLocation(name.getNamespace(), "items" + "/" + name.getPath().replace("glyph_", ""));
-    }
-
 }

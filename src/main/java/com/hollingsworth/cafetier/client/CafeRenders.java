@@ -18,6 +18,8 @@ public class CafeRenders {
     @SubscribeEvent
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(CafeBlocks.MANAGEMENT_DESK_ENTITY.get(), DeskRenderer::new);
+        event.registerBlockEntityRenderer(CafeBlocks.DISPLAY_ENTITY.get(), DisplayCaseRenderer::new);
+        event.registerBlockEntityRenderer(CafeBlocks.PLATE_ENTITY.get(), PlateRenderer::new);
 
 //
         event.registerEntityRenderer(CafeEntities.SEAT.get(), SeatRender::new);

@@ -55,7 +55,7 @@ public class SpawnCustomerWavesState implements IState {
     public void spawnCustomer(){
         ticksToNextSpawn = getNextTickSpawn();
         numSpawned++;
-        BlockPos spawnPos = cafeGame.findRandomSpawnPos(cafeGame.getLevel(), cafeGame.getCafePos(), 1, 1);
+        BlockPos spawnPos = cafeGame.spawnPos;
         if(spawnPos == null){
             System.out.println("no spawn found");
             return;

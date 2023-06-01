@@ -3,15 +3,14 @@ package com.hollingsworth.cafetier.api.statemachine.customer;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitingForFoodState implements IState {
+public class WaitingToPayState implements IState {
     public Customer customer;
+    public int ticksWaited = 0;
 
-    public WaitingForFoodState(Customer customer, ItemStack desiredStack) {
+    public WaitingToPayState(Customer customer){
         this.customer = customer;
-        customer.setDesiredItem(desiredStack.copy());
     }
 
     @Override
@@ -21,7 +20,7 @@ public class WaitingForFoodState implements IState {
 
     @Override
     public void onEnd() {
-        customer.setDesiredItem(ItemStack.EMPTY);
+
     }
 
     @Nullable
@@ -33,8 +32,8 @@ public class WaitingForFoodState implements IState {
     @Nullable
     @Override
     public IState onEvent(IStateEvent event) {
-        if(event instanceof InteractEvent event1 && event1.player.getItemInHand(((InteractEvent) event).hand).sameItem(customer.getDesiredItem())){
-            return new EatingState(customer);
+        if(event instanceof InteractEvent event1){
+            return new LeavingCafeState(customer);
         }
         return null;
     }

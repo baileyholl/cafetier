@@ -2,7 +2,6 @@ package com.hollingsworth.cafetier.data;
 
 
 import com.hollingsworth.cafetier.Cafetier;
-import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +20,7 @@ public class ModDatagen {
         event.getGenerator().addProvider(event.includeServer(), new RecipeDatagen(event.getGenerator()));
         event.getGenerator().addProvider(event.includeServer(), new BlockStatesDatagen(event.getGenerator(), Cafetier.MODID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(event.includeServer(), new PatchouliProvider(event.getGenerator()));
-        event.getGenerator().addProvider(event.includeServer(), new LootTableProvider(event.getGenerator()));
+//        event.getGenerator().addProvider(event.includeServer(), new LootTableProvider(event.getGenerator()));
         event.getGenerator().addProvider(event.includeServer(), new DefaultTableProvider(event.getGenerator()));
         event.getGenerator().addProvider(event.includeServer(), new Advancements(event.getGenerator(), event.getExistingFileHelper()));
     }

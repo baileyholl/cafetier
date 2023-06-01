@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class Customer extends PathfinderMob {
@@ -26,6 +27,7 @@ public class Customer extends PathfinderMob {
     public static final EntityDataAccessor<Integer> PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> MAX_PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> SHOW_PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<ItemStack> DESIRED_ITEM = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.ITEM_STACK);
 
     public CustomerSM brain = new CustomerSM(EmptyState.INSTANCE, this);
     public BlockPos spawnPos;
@@ -53,6 +55,7 @@ public class Customer extends PathfinderMob {
         this.entityData.define(PATIENCE, 100);
         this.entityData.define(MAX_PATIENCE, 100);
         this.entityData.define(SHOW_PATIENCE, false);
+        this.entityData.define(DESIRED_ITEM, ItemStack.EMPTY);
     }
 
     @Override
@@ -128,5 +131,13 @@ public class Customer extends PathfinderMob {
 
     public boolean getShowPatience(){
         return this.entityData.get(SHOW_PATIENCE);
+    }
+
+    public void setDesiredItem(ItemStack desiredItem){
+        this.entityData.set(DESIRED_ITEM, desiredItem);
+    }
+
+    public ItemStack getDesiredItem(){
+        return this.entityData.get(DESIRED_ITEM);
     }
 }

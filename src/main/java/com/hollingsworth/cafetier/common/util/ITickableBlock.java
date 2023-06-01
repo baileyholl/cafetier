@@ -13,7 +13,11 @@ public interface ITickableBlock extends EntityBlock {
     @Nullable
     @Override
     default <T extends BlockEntity> BlockEntityTicker<T> getTicker(final Level level, final BlockState state, final BlockEntityType<T> type) {
-        return createTickerHelper(type, type, (l, pos, s, te) -> ((ITickable) te).tick(l, s, pos));
+        return createTickerHelper(type, type, (l, pos, s, te) ->{
+            if(te instanceof ITickable tte){
+                tte.tick(l, s, pos);
+            }
+        });
     }
 
     @Nullable
