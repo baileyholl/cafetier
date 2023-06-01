@@ -1,4 +1,4 @@
-package com.hollingsworth.cafetier.api.statemachine.customer;
+package com.hollingsworth.cafetier.api.game_events;
 
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import net.minecraft.world.InteractionHand;

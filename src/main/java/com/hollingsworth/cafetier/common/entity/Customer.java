@@ -5,7 +5,7 @@ import com.hollingsworth.cafetier.api.statemachine.CustomerSM;
 import com.hollingsworth.cafetier.api.statemachine.EmptyState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.customer.GoToCafeState;
-import com.hollingsworth.cafetier.api.statemachine.customer.InteractEvent;
+import com.hollingsworth.cafetier.api.game_events.InteractEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,6 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
+
 public class Customer extends PathfinderMob {
     public Cafe cafe;
     public static final EntityDataAccessor<Boolean> CAN_BE_SEATED = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
@@ -28,6 +30,7 @@ public class Customer extends PathfinderMob {
     public static final EntityDataAccessor<Integer> MAX_PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> SHOW_PATIENCE = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<ItemStack> DESIRED_ITEM = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.ITEM_STACK);
+    public static final EntityDataAccessor<BlockPos> EATING_AT = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BLOCK_POS);
 
     public CustomerSM brain = new CustomerSM(EmptyState.INSTANCE, this);
     public BlockPos spawnPos;
@@ -56,6 +59,7 @@ public class Customer extends PathfinderMob {
         this.entityData.define(MAX_PATIENCE, 100);
         this.entityData.define(SHOW_PATIENCE, false);
         this.entityData.define(DESIRED_ITEM, ItemStack.EMPTY);
+        this.entityData.define(EATING_AT, BlockPos.ZERO);
     }
 
     @Override
@@ -101,6 +105,13 @@ public class Customer extends PathfinderMob {
         }
     }
 
+    public @Nullable BlockPos getSeatedPos(){
+        if(this.isPassenger() && this.getVehicle() instanceof SeatEntity seat){
+            return seat.blockPosition();
+        }
+        return null;
+    }
+
     public void setCanBeSeated(boolean canBeSeated){
         this.entityData.set(CAN_BE_SEATED, canBeSeated);
     }
@@ -139,5 +150,13 @@ public class Customer extends PathfinderMob {
 
     public ItemStack getDesiredItem(){
         return this.entityData.get(DESIRED_ITEM);
+    }
+
+    public void setEatingAt(BlockPos eatingAt){
+        this.entityData.set(EATING_AT, eatingAt);
+    }
+
+    public BlockPos getEatingAt(){
+        return this.entityData.get(EATING_AT);
     }
 }

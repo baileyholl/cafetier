@@ -30,11 +30,15 @@ public class SingleItemBlock extends Block {
                     ItemEntity item = new ItemEntity(world, player.getX(), player.getY(), player.getZ(), tile.getStack());
                     world.addFreshEntity(item);
                 }
-                tile.setStack(player.getInventory().removeItem(player.getInventory().selected, 1));
+                setStack(tile, player);
             }
             world.sendBlockUpdated(pos, state, state, 2);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    public void setStack(SingleItemTile tile, Player player){
+        tile.setStack(player.getInventory().removeItem(player.getInventory().selected, 1));
     }
 
     @Override

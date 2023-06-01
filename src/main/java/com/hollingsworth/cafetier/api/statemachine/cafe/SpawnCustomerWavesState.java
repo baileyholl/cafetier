@@ -7,8 +7,6 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.entity.VillagerCustomer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnCustomerWavesState implements IState {
@@ -62,10 +60,6 @@ public class SpawnCustomerWavesState implements IState {
         }
         Customer customer = new VillagerCustomer(cafeGame.desk.getLevel(), spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, cafeGame.cafe);
         cafeGame.desk.getLevel().addFreshEntity(customer);
-        customer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 20 * 30));
-        // print distance between desk and customer
-        System.out.println("distance: " + Math.sqrt(cafeGame.getCafePos().distSqr(spawnPos)));
-        System.out.println(customer.getOnPos());
         cafeGame.onGameEvent(new CustomerSpawnedEvent(customer));
     }
 

@@ -1,6 +1,7 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
 import com.hollingsworth.cafetier.api.game_events.CustomerSeatedEvent;
+import com.hollingsworth.cafetier.api.game_events.InteractEvent;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;

@@ -15,8 +15,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public abstract class CustomerRenderer<T extends Customer, M extends EntityModel<T>> extends MobRenderer<T, M> {
     public CustomerRenderer(EntityRendererProvider.Context pContext, M pModel, float pShadowRadius) {
@@ -42,7 +40,7 @@ public abstract class CustomerRenderer<T extends Customer, M extends EntityModel
                 matrixStack.translate(0, y, 0);
                 matrixStack.mulPose(entityRenderDispatcher.cameraOrientation());
                 matrixStack.scale(0.6f, 0.6f, 0.6f);
-                Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(Items.PUFFERFISH), ItemTransforms.TransformType.GUI,
+                Minecraft.getInstance().getItemRenderer().renderStatic(entityIn.getDesiredItem(), ItemTransforms.TransformType.FIXED,
                         LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, matrixStack, buffer, 0);
                 matrixStack.popPose();
             }

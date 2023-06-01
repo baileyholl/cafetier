@@ -2,10 +2,12 @@ package com.hollingsworth.cafetier.common.block;
 
 import com.hollingsworth.cafetier.common.util.ITickableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -39,5 +41,10 @@ public class DisplayBlock extends SingleItemBlock implements ITickableBlock {
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return shape;
+    }
+
+    @Override
+    public @Nullable BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+        return BlockPathTypes.RAIL;
     }
 }
