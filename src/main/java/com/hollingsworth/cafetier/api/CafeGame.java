@@ -6,10 +6,12 @@ import com.hollingsworth.cafetier.api.statemachine.cafe.GameSetupState;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameTeardownState;
 import com.hollingsworth.cafetier.common.block.DisplayEntity;
 import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.data.BlockTagProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class CafeGame {
     public ScoreManager scoreManager = new ScoreManager();
     public BlockPos spawnPos;
     public List<ItemStack> menuStacks = new ArrayList<>();
+    public List<BlockPos> waitingPositions = new ArrayList<>();
 
     public CafeGame(Cafe cafe, ManagementDeskEntity desk) {
         this.cafe = cafe;
@@ -36,8 +39,23 @@ public class CafeGame {
         gameSm = new SimpleStateMachine(new GameSetupState(this));
         maxWave = 1;
         spawnPos = getValidSpawnPos((ServerLevel) desk.getLevel());
-        menuStacks = getMenuItems((ServerLevel) desk.getLevel());
-        System.out.println(menuStacks.size());
+        initBoundary((ServerLevel) desk.getLevel());
+
+    }
+
+    protected void initBoundary(ServerLevel serverLevel){
+        AABB pAabb = cafe.getBounds();
+        for(BlockPos pos : BlockPos.betweenClosed(Mth.floor(pAabb.minX), Mth.floor(pAabb.minY), Mth.floor(pAabb.minZ), Mth.floor(pAabb.maxX), Mth.floor(pAabb.maxY), Mth.floor(pAabb.maxZ))){
+            BlockEntity be = serverLevel.getBlockEntity(pos);
+            if(be instanceof DisplayEntity displayEntity){
+                if(displayEntity.getStack().isEmpty() || !displayEntity.getStack().isEdible())
+                    continue;
+                menuStacks.add(displayEntity.getStack().copy());
+            }
+            if(serverLevel.getBlockState(pos).is(BlockTagProvider.WAITING_BLOCK)){
+                waitingPositions.add(pos.immutable());
+            }
+        }
     }
 
     public void tick() {
@@ -64,19 +82,6 @@ public class CafeGame {
         if(validPositions.isEmpty())
             return null;
         return validPositions.get(level.random.nextInt(validPositions.size()));
-    }
-
-    public List<ItemStack> getMenuItems(ServerLevel level){
-        AABB pAabb = cafe.getBounds();
-        List<ItemStack> menuItems = new ArrayList<>();
-        for(BlockPos pos : BlockPos.betweenClosed(Mth.floor(pAabb.minX), Mth.floor(pAabb.minY), Mth.floor(pAabb.minZ), Mth.floor(pAabb.maxX), Mth.floor(pAabb.maxY), Mth.floor(pAabb.maxZ))){
-            if(level.getBlockEntity(pos) instanceof DisplayEntity displayEntity){
-                if(displayEntity.getStack().isEmpty() || !displayEntity.getStack().isEdible())
-                    continue;
-                menuItems.add(displayEntity.getStack());
-            }
-        }
-        return menuItems;
     }
 
     public boolean isDone(){

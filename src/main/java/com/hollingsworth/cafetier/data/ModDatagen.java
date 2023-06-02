@@ -2,7 +2,6 @@ package com.hollingsworth.cafetier.data;
 
 
 import com.hollingsworth.cafetier.Cafetier;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +12,6 @@ public class ModDatagen {
 
     @SubscribeEvent
     public static void datagen(GatherDataEvent event) {
-        BlockTagsProvider blocktagsprovider = new BlockTagsProvider(event.getGenerator(), Cafetier.MODID, event.getExistingFileHelper());
 
         event.getGenerator().addProvider(event.includeClient(), new ItemModelGenerator(event.getGenerator(), Cafetier.MODID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(event.includeClient(), new LangDatagen(event.getGenerator(), Cafetier.MODID, "en_us"));
@@ -23,6 +21,7 @@ public class ModDatagen {
 //        event.getGenerator().addProvider(event.includeServer(), new LootTableProvider(event.getGenerator()));
         event.getGenerator().addProvider(event.includeServer(), new DefaultTableProvider(event.getGenerator()));
         event.getGenerator().addProvider(event.includeServer(), new Advancements(event.getGenerator(), event.getExistingFileHelper()));
+        event.getGenerator().addProvider(event.includeServer(), new BlockTagProvider(event.getGenerator(), event.getExistingFileHelper()));
     }
 
 }
