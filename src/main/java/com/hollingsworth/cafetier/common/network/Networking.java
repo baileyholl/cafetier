@@ -25,10 +25,10 @@ public class Networking {
         INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Cafetier.MODID, "network"), () -> "1.0", s -> true, s -> true);
 
         INSTANCE.registerMessage(nextID(),
-                ClientSeatEntity.class,
-                ClientSeatEntity::toBytes,
-                ClientSeatEntity::new,
-                ClientSeatEntity::onMessage);
+                SyncGameClient.class,
+                SyncGameClient::toBytes,
+                SyncGameClient::new,
+                SyncGameClient::onMessage);
     }
 
     public static void sendToNearby(Level world, BlockPos pos, Object toSend) {

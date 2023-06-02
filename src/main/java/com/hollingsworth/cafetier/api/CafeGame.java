@@ -4,11 +4,15 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameSetupState;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameTeardownState;
+import com.hollingsworth.cafetier.client.CafeClientData;
 import com.hollingsworth.cafetier.common.block.DisplayEntity;
 import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.network.Networking;
+import com.hollingsworth.cafetier.common.network.SyncGameClient;
 import com.hollingsworth.cafetier.data.BlockTagProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -61,6 +65,7 @@ public class CafeGame {
     public void tick() {
         gameSm.tick();
         customerManager.tick();
+        sendPacketToClients();
     }
 
     public ServerLevel getLevel(){
@@ -86,5 +91,13 @@ public class CafeGame {
 
     public boolean isDone(){
         return gameSm.getCurrentState() instanceof GameTeardownState;
+    }
+
+    public void sendPacketToClients(){
+        CafeClientData cafeClientData = new CafeClientData(scoreManager.getScore(), customerManager.trackedCustomers.size(), 100);
+        ServerLevel level = (ServerLevel) desk.getLevel();
+        for(ServerPlayer serverPlayer : level.getPlayers(p -> cafe.getBounds().contains(p.position()))){
+            Networking.sendToPlayerClient(new SyncGameClient(cafeClientData), serverPlayer);
+        }
     }
 }

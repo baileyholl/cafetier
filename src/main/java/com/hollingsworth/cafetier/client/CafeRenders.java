@@ -28,6 +28,7 @@ public class CafeRenders {
     @SubscribeEvent
     public static void registerOverlays(final RegisterGuiOverlaysEvent event) {
         event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "tooltip", GuiEntityInfoHUD.OVERLAY);
+        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "cafe_hud", CafeHUD.OVERLAY);
     }
 
 }
