@@ -1,6 +1,5 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
-import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.block.PlateEntity;
 import com.hollingsworth.cafetier.common.entity.Customer;
@@ -9,19 +8,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class EatingState implements IState {
+public class EatingState extends CustomerState {
 
-    public Customer customer;
     public int ticksEating;
     public int ticksToEat;
     public ItemStack eatingStack;
     public BlockPos eatingAt;
 
     public EatingState(Customer customer, ItemStack eatingStack, BlockPos eatingAt) {
-        this.customer = customer;
+        super(customer);
         this.eatingStack = eatingStack;
         this.eatingAt = eatingAt;
-        ticksToEat = 60;
+        ticksToEat = customer.timeToEat();
 
     }
 
@@ -37,7 +35,7 @@ public class EatingState implements IState {
 
     @Nullable
     @Override
-    public IState tick() {
+    public CustomerState tick() {
         ticksEating++;
         if(customer.getLevel().isLoaded(eatingAt) && customer.getLevel().getBlockEntity(eatingAt) instanceof PlateEntity plateEntity){
             ItemStack stack = plateEntity.getStack();
@@ -58,7 +56,7 @@ public class EatingState implements IState {
 
     @Nullable
     @Override
-    public IState onEvent(IStateEvent event) {
+    public CustomerState onEvent(IStateEvent event) {
         return null;
     }
 }

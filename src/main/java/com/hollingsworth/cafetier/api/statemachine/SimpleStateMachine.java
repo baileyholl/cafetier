@@ -2,12 +2,12 @@ package com.hollingsworth.cafetier.api.statemachine;
 
 import javax.annotation.Nonnull;
 
-public class SimpleStateMachine {
+public class SimpleStateMachine<State extends IState, Event extends IStateEvent> {
     public static final boolean DEBUG = true;
 
-    protected IState currentState;
+    protected State currentState;
 
-    public SimpleStateMachine(@Nonnull IState initialState) {
+    public SimpleStateMachine(@Nonnull State initialState) {
         currentState = initialState;
         currentState.onStart();
         if(DEBUG){
@@ -16,7 +16,7 @@ public class SimpleStateMachine {
         }
     }
 
-    protected void changeState(@Nonnull IState nextState) {
+    protected void changeState(@Nonnull State nextState) {
         if(DEBUG){
             System.out.println("Changing state from " + currentState.getClass().getSimpleName() + " to " + nextState.getClass().getSimpleName());
         }
@@ -26,20 +26,22 @@ public class SimpleStateMachine {
     }
 
     public void tick() {
+        if(currentState == null)
+            return;
         IState nextState = currentState.tick();
         if (nextState != null) {
-            changeState(nextState);
+            changeState((State)nextState);
         }
     }
 
-    public void onEvent(IStateEvent event) {
+    public void onEvent(Event event) {
         IState nextState = currentState.onEvent(event);
         if (nextState != null) {
-            changeState(nextState);
+            changeState((State) nextState);
         }
     }
 
-    public IState getCurrentState(){
+    public State getCurrentState(){
         return currentState;
     }
 }

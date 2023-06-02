@@ -1,6 +1,5 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
-import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.entity.SeatEntity;
@@ -10,11 +9,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.Nullable;
 
-public class LeavingCafeState implements IState {
-    public Customer customer;
+public class LeavingCafeState extends CustomerState {
+
+    public int ticksLeaving;
+    public int maxTicksToLeave;
 
     public LeavingCafeState(Customer customer) {
-        this.customer = customer;
+        super(customer);
+        maxTicksToLeave = 20 * 60;
     }
 
     @Override
@@ -29,7 +31,12 @@ public class LeavingCafeState implements IState {
 
     @Nullable
     @Override
-    public IState tick() {
+    public CustomerState tick() {
+        ticksLeaving++;
+        if(ticksLeaving >= maxTicksToLeave){
+            customer.remove(Entity.RemovalReason.DISCARDED);
+            return null;
+        }
         if(customer.isPassenger() && customer.getVehicle() instanceof SeatEntity seatEntity){
             customer.stopRiding();
         }
@@ -44,7 +51,7 @@ public class LeavingCafeState implements IState {
 
     @Nullable
     @Override
-    public IState onEvent(IStateEvent event) {
+    public CustomerState onEvent(IStateEvent event) {
         return null;
     }
 }

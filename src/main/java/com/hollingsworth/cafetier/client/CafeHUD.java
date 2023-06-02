@@ -17,6 +17,7 @@ public class CafeHUD {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR || ClientInfo.cafeClientData == null || ClientInfo.ticksToShowHUD <= 0)
             return;
+        mc.font.drawShadow(poseStack, "Score: " + ClientInfo.cafeClientData.score, 10, mc.getWindow().getGuiScaledHeight() - 45, 0xFFFFFF);
         mc.font.drawShadow(poseStack, "Num customers: " + ClientInfo.cafeClientData.customersRemaining, 10, mc.getWindow().getGuiScaledHeight() - 30, 0xFFFFFF);
     }
 }

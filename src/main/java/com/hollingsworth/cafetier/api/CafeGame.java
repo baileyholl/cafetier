@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.api;
 
+import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameSetupState;
@@ -7,6 +8,7 @@ import com.hollingsworth.cafetier.api.statemachine.cafe.GameTeardownState;
 import com.hollingsworth.cafetier.client.CafeClientData;
 import com.hollingsworth.cafetier.common.block.DisplayEntity;
 import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.network.Networking;
 import com.hollingsworth.cafetier.common.network.SyncGameClient;
 import com.hollingsworth.cafetier.data.BlockTagProvider;
@@ -80,6 +82,13 @@ public class CafeGame {
         gameSm.onEvent(event);
         customerManager.onEvent(event);
         scoreManager.onEvent(event);
+    }
+
+    public void spawnCustomer(Customer customer, BlockPos pos){
+        customer.setPos(pos.getX(), pos.getY(), pos.getZ());
+        customer.spawnPos = pos.immutable();
+        getLevel().addFreshEntity(customer);
+        onGameEvent(new CustomerSpawnedEvent(customer));
     }
 
     public BlockPos getValidSpawnPos(ServerLevel level) {

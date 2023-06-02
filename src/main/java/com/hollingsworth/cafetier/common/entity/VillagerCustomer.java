@@ -18,6 +18,10 @@ public class VillagerCustomer extends Customer implements VillagerDataHolder {
         super(pEntityType, pLevel, x, y, z, cafe);
     }
 
+    public VillagerCustomer(Level level, Cafe cafe){
+        super(CafeEntities.VILLAGER.get(), level, cafe);
+    }
+
     public VillagerCustomer(Level level, double x, double y, double z, Cafe cafe) {
         super(CafeEntities.VILLAGER.get(), level, x, y, z, cafe);
     }

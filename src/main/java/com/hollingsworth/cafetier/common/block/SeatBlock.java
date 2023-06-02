@@ -94,7 +94,7 @@ public class SeatBlock extends HorizontalDirectionalBlock {
         if(entity instanceof Customer customer){
             customer.dropLeash(true, true);
             if(customer.cafe.getGame() != null){
-                customer.cafe.getGame().onGameEvent(new CustomerSeatedEvent(customer, pos));
+                customer.cafe.getGame().onGameEvent(new CustomerSeatedEvent(customer, pos.immutable()));
             }
         }
     }

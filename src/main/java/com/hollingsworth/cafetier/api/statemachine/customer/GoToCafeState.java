@@ -1,7 +1,6 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
 import com.hollingsworth.cafetier.api.CafeGame;
-import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.util.BlockUtil;
@@ -11,14 +10,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GoToCafeState implements IState {
-    public Customer customer;
+public class GoToCafeState extends CustomerState{
     public BlockPos targetPos;
     public boolean enteredCafe;
     public int timeInCafe;
     public int timePathing;
+
     public GoToCafeState(Customer customer) {
-        this.customer = customer;
+        super(customer);
     }
 
     @Override
@@ -42,11 +41,15 @@ public class GoToCafeState implements IState {
 
     @Nullable
     @Override
-    public IState tick() {
+    public CustomerState tick() {
         Path path = customer.getNavigation().createPath(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1);
         customer.getNavigation().moveTo(path, 0.5);
 
         timePathing++;
+        if(timePathing > 20 * 30){
+            return new WaitForSeatingState(customer);
+        }
+
         if(!enteredCafe && customer.cafe.getBounds().contains(customer.position())){
             enteredCafe = true;
         }
@@ -63,7 +66,7 @@ public class GoToCafeState implements IState {
 
     @Nullable
     @Override
-    public IState onEvent(IStateEvent event) {
+    public CustomerState onEvent(IStateEvent event) {
         return null;
     }
 }

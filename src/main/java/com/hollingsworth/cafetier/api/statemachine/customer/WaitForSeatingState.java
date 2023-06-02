@@ -2,17 +2,16 @@ package com.hollingsworth.cafetier.api.statemachine.customer;
 
 import com.hollingsworth.cafetier.api.game_events.CustomerSeatedEvent;
 import com.hollingsworth.cafetier.api.game_events.InteractEvent;
-import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitForSeatingState implements IState {
+public class WaitForSeatingState extends CustomerState {
 
-    public Customer customer;
+    public int ticksWaiting = 0;
 
     public WaitForSeatingState(Customer customer) {
-        this.customer = customer;
+        super(customer);
     }
 
     @Override
@@ -27,13 +26,19 @@ public class WaitForSeatingState implements IState {
 
     @Nullable
     @Override
-    public IState tick() {
+    public CustomerState tick() {
+        ticksWaiting++;
+        if(ticksWaiting >= customer.maxWaitForSeat()){
+            if(ticksWaiting % 20 == 0) {
+                customer.loseHappiness(1);
+            }
+        }
         return null;
     }
 
     @Nullable
     @Override
-    public IState onEvent(IStateEvent event) {
+    public CustomerState onEvent(IStateEvent event) {
         if(event instanceof InteractEvent interactEvent && customer.getLeashHolder() != interactEvent.player){
             customer.setLeashedTo(interactEvent.player, true);
         }

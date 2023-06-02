@@ -1,70 +1,35 @@
 package com.hollingsworth.cafetier.api.statemachine.cafe;
 
 import com.hollingsworth.cafetier.api.CafeGame;
-import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.common.entity.Customer;
-import com.hollingsworth.cafetier.common.entity.VillagerCustomer;
-import net.minecraft.core.BlockPos;
+import com.hollingsworth.cafetier.api.wave.WaveBuilder;
+import com.hollingsworth.cafetier.api.wave.WaveSchedule;
 import org.jetbrains.annotations.Nullable;
 
-public class SpawnCustomerWavesState implements IState {
-
-    public CafeGame cafeGame;
-    public int numSpawned;
-    public int ticksToNextSpawn;
-    public int maxSpawns;
+public class SpawnCustomerWavesState extends GameState {
+    public WaveSchedule waveSchedule;
 
     public SpawnCustomerWavesState(CafeGame cafeGame) {
-        this.cafeGame = cafeGame;
-        maxSpawns = 1;
+        super(cafeGame);
+        waveSchedule = new WaveBuilder(cafeGame, 1).balancedSchedule();
     }
 
     @Override
-    public void onStart() {
-
-    }
+    public void onStart() {}
 
     @Override
-    public void onEnd() {
-
-    }
+    public void onEnd() {}
 
     @Nullable
     @Override
     public IState tick() {
-        if(numSpawned >= maxSpawns){
-            cafeGame.scoreManager.wavesCompleted++;
-            if(cafeGame.scoreManager.wavesCompleted >= cafeGame.maxWave){
-                return new GameTeardownState();
-            }else{
-                return new TakeBreakState(cafeGame);
-            }
-        }
-        if(ticksToNextSpawn <= 0){
-            spawnCustomer();
+        if(waveSchedule.isDone()){
+            return new GameTeardownState();
         }else{
-            ticksToNextSpawn--;
+            waveSchedule.tick(game);
         }
         return null;
-    }
-
-    public void spawnCustomer(){
-        ticksToNextSpawn = getNextTickSpawn();
-        numSpawned++;
-        BlockPos spawnPos = cafeGame.spawnPos;
-        if(spawnPos == null){
-            System.out.println("no spawn found");
-            return;
-        }
-        Customer customer = new VillagerCustomer(cafeGame.desk.getLevel(), spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, cafeGame.cafe);
-        cafeGame.desk.getLevel().addFreshEntity(customer);
-        cafeGame.onGameEvent(new CustomerSpawnedEvent(customer));
-    }
-
-    public int getNextTickSpawn(){
-        return (int) (Math.random() * 100) + 50;
     }
 
     @Nullable
