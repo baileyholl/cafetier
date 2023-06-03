@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.common.entity;
 
+import com.hollingsworth.cafetier.common.block.SeatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -45,6 +46,17 @@ public class SeatEntity extends Entity implements IEntityAdditionalSpawnData {
     @Override
     protected boolean canRide(Entity pVehicle) {
         return !(pVehicle instanceof FakePlayer);
+    }
+
+    @Override
+    public void tick() {
+        if (level.isClientSide)
+            return;
+        boolean blockPresent = level.getBlockState(blockPosition())
+                .getBlock() instanceof SeatBlock;
+        if (isVehicle() && blockPresent)
+            return;
+        this.discard();
     }
 
     @Override

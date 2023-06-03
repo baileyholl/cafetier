@@ -1,10 +1,7 @@
 package com.hollingsworth.cafetier.client;
 
-import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.LightTexture;
@@ -14,7 +11,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 public abstract class CustomerRenderer<T extends Customer, M extends EntityModel<T>> extends MobRenderer<T, M> {
     public CustomerRenderer(EntityRendererProvider.Context pContext, M pModel, float pShadowRadius) {
@@ -35,7 +31,7 @@ public abstract class CustomerRenderer<T extends Customer, M extends EntityModel
         {
             double y = entityIn.getBbHeight() + (model.young ? 0.5f : 0.8f);
 
-            if(!entityIn.getDesiredItem().isEmpty()){
+            if(!entityIn.getDesiredItem().isEmpty() && entityIn.showDesiredItem()){
                 matrixStack.pushPose();
                 matrixStack.translate(0, y, 0);
                 matrixStack.mulPose(entityRenderDispatcher.cameraOrientation());
@@ -44,23 +40,23 @@ public abstract class CustomerRenderer<T extends Customer, M extends EntityModel
                         LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, matrixStack, buffer, 0);
                 matrixStack.popPose();
             }
-
-            matrixStack.pushPose();
-            matrixStack.translate(0, y, 0);
-            matrixStack.mulPose(entityRenderDispatcher.cameraOrientation());
-            //matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90));
-
-            matrixStack.scale(-0.025F, -0.025F, 0.025F);
-
-            final Matrix4f pose = matrixStack.last().pose();
-
-            VertexConsumer r = buffer.getBuffer(RenderTypes.worldEntityIcon(new ResourceLocation(Cafetier.MODID, "textures/icons/blocking.png")));
-            r.vertex(pose, -5, 0, 0).uv(0, 0).endVertex();
-            r.vertex(pose, -5, 10, 0).uv(0, 1).endVertex();
-            r.vertex(pose, 5, 10, 0).uv(1, 1).endVertex();
-            r.vertex(pose, 5, 0, 0).uv(1, 0).endVertex();
-
-            matrixStack.popPose();
+//
+//            matrixStack.pushPose();
+//            matrixStack.translate(0, y, 0);
+//            matrixStack.mulPose(entityRenderDispatcher.cameraOrientation());
+//            //matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90));
+//
+//            matrixStack.scale(-0.025F, -0.025F, 0.025F);
+//
+//            final Matrix4f pose = matrixStack.last().pose();
+//
+//            VertexConsumer r = buffer.getBuffer(RenderTypes.worldEntityIcon(new ResourceLocation(Cafetier.MODID, "textures/icons/blocking.png")));
+//            r.vertex(pose, -5, 0, 0).uv(0, 0).endVertex();
+//            r.vertex(pose, -5, 10, 0).uv(0, 1).endVertex();
+//            r.vertex(pose, 5, 10, 0).uv(1, 1).endVertex();
+//            r.vertex(pose, 5, 0, 0).uv(1, 0).endVertex();
+//
+//            matrixStack.popPose();
         }
 
     }

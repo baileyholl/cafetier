@@ -20,20 +20,23 @@ public class WaitingForFoodState extends CustomerState {
 
     @Override
     public void onStart() {
-
+        customer.setShowDesiredItem(true);
     }
 
     @Override
     public void onEnd() {
-        customer.setDesiredItem(ItemStack.EMPTY);
+        customer.setShowDesiredItem(false);
     }
 
     @Nullable
     @Override
     public CustomerState tick() {
+        if (customer.getSeatedPos() == null) {
+            return new NeedsReseatedState(customer, this);
+        }
         ticksWaiting++;
-        if(ticksWaiting > customer.maxWaitForFood()){
-            if(ticksWaiting % 20 == 0){
+        if (ticksWaiting > customer.maxWaitForFood()) {
+            if (ticksWaiting % 20 == 0) {
                 customer.loseHappiness(1);
             }
         }
@@ -43,14 +46,11 @@ public class WaitingForFoodState extends CustomerState {
     @Nullable
     @Override
     public CustomerState onEvent(IStateEvent event) {
-//        if(event instanceof InteractEvent event1 && event1.player.getItemInHand(((InteractEvent) event).hand).sameItem(customer.getDesiredItem())){
-//            return new EatingState(customer);
-//        }
-        if(event instanceof FoodServedEvent servedEvent){
+        if (event instanceof FoodServedEvent servedEvent) {
             BlockPos seatPos = this.customer.getSeatedPos();
             if (seatPos != null
                     && customer.getLevel().getBlockEntity(servedEvent.pos) instanceof PlateEntity plateEntity
-                    && plateEntity.getStack().sameItem(customer.getDesiredItem())) {
+                    && customer.desiresStack(plateEntity.getStack())) {
 
                 // Check if the food was served 1 block up and is N/S/E/W of the seat
                 for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {

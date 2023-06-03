@@ -6,17 +6,18 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitForSeatingState extends CustomerState {
-
-    public int ticksWaiting = 0;
-
-    public WaitForSeatingState(Customer customer) {
+public class NeedsReseatedState extends CustomerState{
+    public int ticks = 0;
+    public CustomerState previousState;
+    public NeedsReseatedState(Customer customer, CustomerState previousState){
         super(customer);
+        this.previousState = previousState;
     }
 
     @Override
     public void onStart() {
         customer.setCanBeSeated(true);
+        customer.loseHappiness(5);
     }
 
     @Override
@@ -27,11 +28,9 @@ public class WaitForSeatingState extends CustomerState {
     @Nullable
     @Override
     public CustomerState tick() {
-        ticksWaiting++;
-        if(ticksWaiting >= customer.maxWaitForSeat()){
-            if(ticksWaiting % 20 == 0) {
-                customer.loseHappiness(1);
-            }
+        ticks++;
+        if(ticks % 20 == 0){
+            customer.loseHappiness(1);
         }
         return null;
     }
@@ -43,7 +42,7 @@ public class WaitForSeatingState extends CustomerState {
             customer.setLeashedTo(interactEvent.player, true);
         }
         if(event instanceof CustomerSeatedEvent customerSeatedEvent && customerSeatedEvent.customer == customer){
-            return new WaitingToOrderState(customer);
+            return previousState;
         }
         return null;
     }
