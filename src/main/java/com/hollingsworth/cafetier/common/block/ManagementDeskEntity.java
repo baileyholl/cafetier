@@ -16,24 +16,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class ManagementDeskEntity extends ModdedTile implements ITickable, ITooltipProvider {
-    private UUID uuid;
+    private UUID uuid = null;
     public ManagementDeskEntity(BlockPos pos, BlockState state) {
         super(CafeBlocks.MANAGEMENT_DESK_ENTITY.get(), pos, state);
     }
 
     @Override
     public void tick() {
-        if(level.isClientSide()) {
-            return;
-        }
 
-        var cafe = getCafe();
-        if(cafe != null && cafe.deskPos != null && cafe.deskPos.equals(worldPosition)){
-            cafe.tick(this);
-        }else{
-            uuid = null;
-            updateBlock();
-        }
     }
 
     public void setCafe(UUID uuid){

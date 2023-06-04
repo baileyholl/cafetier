@@ -1,6 +1,8 @@
 package com.hollingsworth.cafetier.api;
 
 import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
+import com.hollingsworth.cafetier.api.game_events.GameInvalidatedEvent;
+import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
 import com.hollingsworth.cafetier.api.statemachine.cafe.GameSetupState;
@@ -32,21 +34,29 @@ public class CafeGame {
     public ManagementDeskEntity desk;
     public int maxWave;
 
-    public SimpleStateMachine gameSm;
+    public SimpleStateMachine<IState<?>, IStateEvent> gameSm;
     public CustomerManager customerManager = new CustomerManager();
     public ScoreManager scoreManager = new ScoreManager();
-    public BlockPos spawnPos;
     public List<ItemStack> menuStacks = new ArrayList<>();
     public List<BlockPos> waitingPositions = new ArrayList<>();
+    public List<BlockPos> spawnPositions = new ArrayList<>();
 
-    public CafeGame(Cafe cafe, ManagementDeskEntity desk) {
+
+    protected CafeGame(Cafe cafe, ManagementDeskEntity desk) {
         this.cafe = cafe;
         this.desk = desk;
-        gameSm = new SimpleStateMachine(new GameSetupState(this));
+        gameSm = new SimpleStateMachine<IState<?>, IStateEvent>(new GameSetupState(this));
         maxWave = 1;
-        spawnPos = getValidSpawnPos((ServerLevel) desk.getLevel());
+        spawnPositions = CustomerSpawners.getSpawnersForCafe(desk.getLevel(), cafe, 10);
         initBoundary((ServerLevel) desk.getLevel());
+    }
 
+    public static CafeGame buildGame(Cafe cafe, ManagementDeskEntity desk){
+        CafeGame game = new CafeGame(cafe, desk);
+        if(game.spawnPositions.isEmpty() || game.menuStacks.isEmpty() || !game.isValid()){
+            return null;
+        }
+        return game;
     }
 
     protected void initBoundary(ServerLevel serverLevel){
@@ -91,15 +101,16 @@ public class CafeGame {
         onGameEvent(new CustomerSpawnedEvent(customer));
     }
 
-    public BlockPos getValidSpawnPos(ServerLevel level) {
-        List<BlockPos> validPositions = CustomerSpawners.getSpawnersForCafe(level, cafe, 10);
-        if(validPositions.isEmpty())
-            return null;
-        return validPositions.get(level.random.nextInt(validPositions.size()));
-    }
-
     public boolean isDone(){
         return gameSm.getCurrentState() instanceof GameTeardownState;
+    }
+
+    public boolean isValid(){
+        return cafe.deskPos != null && cafe.getBounds() != null && getLevel().getBlockEntity(cafe.deskPos) instanceof ManagementDeskEntity;
+    }
+
+    public void doTeardown(){
+        onGameEvent(new GameInvalidatedEvent());
     }
 
     public void sendPacketToClients(){

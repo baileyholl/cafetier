@@ -1,6 +1,8 @@
 package com.hollingsworth.cafetier.api.statemachine;
 
+import com.hollingsworth.cafetier.api.game_events.GameInvalidatedEvent;
 import com.hollingsworth.cafetier.api.statemachine.customer.CustomerState;
+import com.hollingsworth.cafetier.api.statemachine.customer.LeavingCafeState;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -26,5 +28,17 @@ public class CustomerSM extends SimpleStateMachine<CustomerState, IStateEvent> {
 
     public void setState(@NotNull CustomerState state){
         this.changeState(state);
+    }
+
+    public CustomerState getState(){
+        return currentState;
+    }
+
+    @Override
+    public void onEvent(IStateEvent event) {
+        super.onEvent(event);
+        if(event instanceof GameInvalidatedEvent){
+            changeState(new LeavingCafeState(customer));
+        }
     }
 }

@@ -33,18 +33,14 @@ public class Cafe {
         return tag;
     }
 
-    public void tick(ManagementDeskEntity desk){
-        if(game != null){
-            game.tick();
-        }
-    }
-
     public void startGame(ManagementDeskEntity desk, Player player){
-        game = new CafeGame(this, desk);
-        if(game.spawnPos == null || game.menuStacks.isEmpty()){
+        game = CafeGame.buildGame(this, desk);
+        if(game == null){
             player.sendSystemMessage(Component.literal("Invalid game setup"));
             game = null;
+            return;
         }
+        GameManager.addGame(desk.getLevel(), game);
     }
 
     public CafeGame getGame(){

@@ -6,7 +6,6 @@ import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.entity.VillagerCustomer;
 import com.hollingsworth.cafetier.common.util.RandUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class WaveBuilder {
 
     public WaveBuilder(CafeGame game, int difficulty){
         this.game = game;
-        spawnPoints = List.of(game.getValidSpawnPos((ServerLevel) game.desk.getLevel()));
+        spawnPoints = game.spawnPositions;
         this.difficulty = difficulty;
     }
 
@@ -33,11 +32,11 @@ public class WaveBuilder {
         int numberSplits = 3;
         int ticksPerSplit = maxWaveTime / numberSplits;
         for(int i = 0; i < numberSplits; i++){
-            List<Customer> customers = new ArrayList<>();
             for(int j = 0; j < numCustomers; j++){
+                List<Customer> customers = new ArrayList<>();
                 customers.add(getCustomer(game.getLevel(), game.cafe));
+                groups.add(new SpawnGroup(customers, i * ticksPerSplit + j * 45));
             }
-            groups.add(new SpawnGroup(customers, i * ticksPerSplit));
         }
         return new WaveSchedule(groups, spawnPoints);
     }

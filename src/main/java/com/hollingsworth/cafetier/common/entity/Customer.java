@@ -192,11 +192,11 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
     }
 
     public int maxWaitForSeat(){
-        return 20 * 10;
+        return 20 * 20;
     }
 
     public int maxWaitToOrder(){
-        return 20 * 10;
+        return 20 * 20;
     }
 
     public int maxWaitForFood(){
