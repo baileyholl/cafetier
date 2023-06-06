@@ -4,6 +4,7 @@ import com.hollingsworth.cafetier.common.block.CafeBlocks;
 import com.hollingsworth.cafetier.common.entity.CafeEntities;
 import com.hollingsworth.cafetier.common.item.CafeItems;
 import com.hollingsworth.cafetier.common.network.Networking;
+import com.hollingsworth.cafetier.common.util.DataSerializers;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,7 +46,7 @@ public class Cafetier {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         Networking.registerMessages();
-
+        event.enqueueWork(DataSerializers::register);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

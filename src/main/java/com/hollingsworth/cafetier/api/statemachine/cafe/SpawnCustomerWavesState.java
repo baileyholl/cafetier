@@ -12,7 +12,7 @@ public class SpawnCustomerWavesState extends GameState {
 
     public SpawnCustomerWavesState(CafeGame cafeGame) {
         super(cafeGame);
-        waveSchedule = new WaveBuilder(cafeGame, 1).balancedSchedule();
+        waveSchedule = new WaveBuilder(cafeGame, 1).balancedSchedule(0);
     }
 
     @Override

@@ -3,14 +3,18 @@ package com.hollingsworth.cafetier.api.statemachine.cafe;
 import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
+import com.hollingsworth.cafetier.api.wave.WaveSchedule;
 import org.jetbrains.annotations.Nullable;
 
-public class GameSetupState implements IState {
+import java.util.ArrayList;
+import java.util.List;
 
-    public CafeGame game;
+public class GameSetupState extends GameState {
 
+    public List<WaveSchedule> waveSchedules = new ArrayList<>();
     public GameSetupState(CafeGame cafeGame) {
-        this.game = cafeGame;
+        super(cafeGame);
+
     }
 
     @Override

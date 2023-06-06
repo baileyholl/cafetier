@@ -22,6 +22,6 @@ public abstract class CustomerState implements IState<CustomerState> {
     }
 
     public CafeGame getGame(){
-        return customer.cafe.getGame();
+        return customer.game;
     }
 }

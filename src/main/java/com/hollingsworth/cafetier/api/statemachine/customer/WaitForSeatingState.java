@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
+import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.api.game_events.CustomerSeatedEvent;
 import com.hollingsworth.cafetier.api.game_events.InteractEvent;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
@@ -17,21 +18,21 @@ public class WaitForSeatingState extends CustomerState {
     @Override
     public void onStart() {
         customer.setCanBeSeated(true);
+        customer.setDisplayIcon(Cafetier.MODID + ":textures/gui/icons/waiting_for_seat.png");
     }
 
     @Override
     public void onEnd() {
         customer.setCanBeSeated(false);
+        customer.setDisplayIcon("");
     }
 
     @Nullable
     @Override
     public CustomerState tick() {
         ticksWaiting++;
-        if(ticksWaiting >= customer.maxWaitForSeat()){
-            if(ticksWaiting % 20 == 0) {
-                customer.loseHappiness(1);
-            }
+        if(ticksWaiting >= customer.maxWaitForSeat() && ticksWaiting % 20 == 0){
+            customer.loseHappiness(1);
         }
         return null;
     }
@@ -43,7 +44,8 @@ public class WaitForSeatingState extends CustomerState {
             customer.setLeashedTo(interactEvent.player, true);
         }
         if(event instanceof CustomerSeatedEvent customerSeatedEvent && customerSeatedEvent.customer == customer){
-            return new WaitingToOrderState(customer);
+            customer.acknowledgeServer(customerSeatedEvent.seatedBy);
+            return new ReadingMenuState(customer);
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package com.hollingsworth.cafetier.common.entity;
 
-import com.hollingsworth.cafetier.api.Cafe;
+import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.api.game_events.CustomerDiedEvent;
 import com.hollingsworth.cafetier.api.game_events.InteractEvent;
 import com.hollingsworth.cafetier.api.statemachine.CustomerSM;
@@ -36,8 +36,8 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Customer extends PathfinderMob implements ITooltipProvider {
-    public Cafe cafe;
+public abstract class Customer extends PathfinderMob implements ITooltipProvider {
+    public CafeGame game;
     public static final EntityDataAccessor<Boolean> CAN_BE_SEATED = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> HAPPINESS_HIT_ZERO = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> HAPPINESS = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.INT);
@@ -45,6 +45,7 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
     public static final EntityDataAccessor<ItemStack> DESIRED_ITEM = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.ITEM_STACK);
     public static final EntityDataAccessor<BlockPos> EATING_AT = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BLOCK_POS);
     public static final EntityDataAccessor<Boolean> SHOW_DESIRED_ITEM = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DISPLAY_ICON = SynchedEntityData.defineId(Customer.class, EntityDataSerializers.STRING);
     public int angryParticleCD = 0;
     public CustomerSM brain = null;
     public BlockPos spawnPos;
@@ -54,20 +55,20 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
         super(pEntityType, pLevel);
     }
 
-    public Customer(EntityType<? extends PathfinderMob> entityType, Level level, Cafe cafe){
+    public Customer(EntityType<? extends PathfinderMob> entityType, Level level, CafeGame game){
         this(entityType, level);
-        this.cafe = cafe;
+        this.game = game;
         brain = new CustomerSM(new GoToCafeState(this), this);
     }
 
-    public Customer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel, double x, double y, double z, Cafe cafe){
-        this(pEntityType, pLevel, cafe);
+    public Customer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel, double x, double y, double z, CafeGame game){
+        this(pEntityType, pLevel, game);
         this.setPos(x, y, z);
         spawnPos = new BlockPos(x, y, z);
     }
 
-    public Customer(EntityType<? extends PathfinderMob> entityType, Level level, BlockPos spawnPos, Cafe cafe) {
-        this(entityType, level, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, cafe);
+    public Customer(EntityType<? extends PathfinderMob> entityType, Level level, BlockPos spawnPos, CafeGame game) {
+        this(entityType, level, spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, game);
     }
 
     public boolean desiresStack(ItemStack stack){
@@ -94,6 +95,7 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
         this.entityData.define(EATING_AT, BlockPos.ZERO);
         this.entityData.define(HAPPINESS_HIT_ZERO, false);
         this.entityData.define(SHOW_DESIRED_ITEM, false);
+        this.entityData.define(DISPLAY_ICON, "");
     }
 
     @Override
@@ -103,7 +105,7 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
             if(brain != null) {
                 brain.tick();
             }
-            if(cafe == null || cafe.getGame() == null){
+            if(game == null || game.cafe == null){
                 this.remove(RemovalReason.DISCARDED);
             }
             if(angryParticleCD > 0){
@@ -183,8 +185,8 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
         return null;
     }
 
-    public int timeToOrder(){
-        return 20 * 8;
+    public int timeToReadMenu(){
+        return 20 * 10;
     }
 
     public int timeToEat(){
@@ -221,6 +223,13 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
             this.onHappinessZero();
         }
     }
+
+    @Override
+    public void getTooltip(List<Component> tooltip) {
+        tooltip.add(Component.literal("Happiness: " + this.getHappiness()));
+    }
+
+    public abstract void acknowledgeServer(@Nullable LivingEntity entity);
 
     public void angryAnimate(){
         this.addParticlesAroundSelf(ParticleTypes.ANGRY_VILLAGER);
@@ -283,8 +292,11 @@ public class Customer extends PathfinderMob implements ITooltipProvider {
         return this.entityData.get(SHOW_DESIRED_ITEM);
     }
 
-    @Override
-    public void getTooltip(List<Component> tooltip) {
-        tooltip.add(Component.literal("Happiness: " + this.getHappiness()));
+    public String getDisplayIcon(){
+        return this.entityData.get(DISPLAY_ICON);
+    }
+
+    public void setDisplayIcon(String displayIcon){
+        this.entityData.set(DISPLAY_ICON, displayIcon);
     }
 }

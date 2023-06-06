@@ -33,6 +33,11 @@ public class GameManager {
         }
     }
 
+    public static boolean hasGames(Level level){
+        String key = level.dimension().location().toString();
+        return games.containsKey(key);
+    }
+
     public static void addGame(Level level, CafeGame game){
         String key = level.dimension().location().toString();
         if(!games.containsKey(key)){

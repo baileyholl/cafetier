@@ -80,7 +80,7 @@ public class SeatBlock extends HorizontalDirectionalBlock {
 //        sitDown(entity.level, pos, entity);
     }
 
-    public void sitDown(Level world, BlockPos pos, Entity entity){
+    public void sitDown(Level world, BlockPos pos, Entity entity, @Nullable LivingEntity seatedBy){
         if(world.isClientSide || entity == null){
             return;
         }
@@ -93,8 +93,8 @@ public class SeatBlock extends HorizontalDirectionalBlock {
             tamableAnimal.setInSittingPose(true);
         if(entity instanceof Customer customer){
             customer.dropLeash(true, true);
-            if(customer.cafe.getGame() != null){
-                customer.cafe.getGame().onGameEvent(new CustomerSeatedEvent(customer, pos.immutable()));
+            if(customer.game != null){
+                customer.game.onGameEvent(new CustomerSeatedEvent(customer, pos.immutable(), seatedBy));
             }
         }
     }
@@ -151,7 +151,7 @@ public class SeatBlock extends HorizontalDirectionalBlock {
         if(pLevel.isClientSide){
             return InteractionResult.SUCCESS;
         }
-        sitDown(pLevel, pPos, getLeashed(pPlayer).orElse(null));
+        sitDown(pLevel, pPos, getLeashed(pPlayer).orElse(null), pPlayer);
         return InteractionResult.SUCCESS;
     }
 

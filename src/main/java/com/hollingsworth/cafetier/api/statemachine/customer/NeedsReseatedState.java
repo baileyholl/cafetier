@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
+import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.api.game_events.CustomerSeatedEvent;
 import com.hollingsworth.cafetier.api.game_events.InteractEvent;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
@@ -18,11 +19,13 @@ public class NeedsReseatedState extends CustomerState{
     public void onStart() {
         customer.setCanBeSeated(true);
         customer.loseHappiness(5);
+        customer.setDisplayIcon(Cafetier.MODID + ":textures/gui/icons/waiting_for_seat.png");
     }
 
     @Override
     public void onEnd() {
         customer.setCanBeSeated(false);
+        customer.setDisplayIcon("");
     }
 
     @Nullable

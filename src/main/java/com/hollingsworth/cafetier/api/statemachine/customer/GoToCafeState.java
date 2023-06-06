@@ -22,7 +22,7 @@ public class GoToCafeState extends CustomerState{
 
     @Override
     public void onStart() {
-        CafeGame game = customer.cafe.getGame();
+        CafeGame game = customer.game;
         if(game == null){
             return;
         }
@@ -50,7 +50,7 @@ public class GoToCafeState extends CustomerState{
             return new WaitForSeatingState(customer);
         }
 
-        if(!enteredCafe && customer.cafe.getBounds().contains(customer.position())){
+        if(!enteredCafe && customer.game.cafe.getBounds().contains(customer.position())){
             enteredCafe = true;
         }
         if(enteredCafe){

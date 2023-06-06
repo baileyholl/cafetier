@@ -10,6 +10,7 @@ import com.hollingsworth.cafetier.api.statemachine.cafe.GameTeardownState;
 import com.hollingsworth.cafetier.client.CafeClientData;
 import com.hollingsworth.cafetier.common.block.DisplayEntity;
 import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.block.SeatBlock;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.network.Networking;
 import com.hollingsworth.cafetier.common.network.SyncGameClient;
@@ -40,6 +41,7 @@ public class CafeGame {
     public List<ItemStack> menuStacks = new ArrayList<>();
     public List<BlockPos> waitingPositions = new ArrayList<>();
     public List<BlockPos> spawnPositions = new ArrayList<>();
+    public int numSeats = 0;
 
 
     protected CafeGame(Cafe cafe, ManagementDeskEntity desk) {
@@ -70,6 +72,10 @@ public class CafeGame {
             }
             if(serverLevel.getBlockState(pos).is(BlockTagProvider.WAITING_BLOCK)){
                 waitingPositions.add(pos.immutable());
+            }
+
+            if(serverLevel.getBlockState(pos).getBlock() instanceof SeatBlock){
+                numSeats++;
             }
         }
     }
