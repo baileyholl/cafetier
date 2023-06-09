@@ -2,6 +2,7 @@ package com.hollingsworth.cafetier.api;
 
 import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
 import com.hollingsworth.cafetier.api.game_events.GameInvalidatedEvent;
+import com.hollingsworth.cafetier.api.item.ItemUtils;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
@@ -19,12 +20,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * An instance of a cafe game.
@@ -34,6 +37,7 @@ public class CafeGame {
     public Cafe cafe;
     public ManagementDeskEntity desk;
     public int maxWave;
+    public final UUID uuid;
 
     public SimpleStateMachine<IState<?>, IStateEvent> gameSm;
     public CustomerManager customerManager = new CustomerManager();
@@ -47,9 +51,10 @@ public class CafeGame {
     protected CafeGame(Cafe cafe, ManagementDeskEntity desk) {
         this.cafe = cafe;
         this.desk = desk;
-        gameSm = new SimpleStateMachine<IState<?>, IStateEvent>(new GameSetupState(this));
         maxWave = 1;
         spawnPositions = CustomerSpawners.getSpawnersForCafe(desk.getLevel(), cafe, 10);
+        gameSm = new SimpleStateMachine<IState<?>, IStateEvent>(new GameSetupState(this));
+        uuid = UUID.randomUUID();
         initBoundary((ServerLevel) desk.getLevel());
     }
 
@@ -116,6 +121,10 @@ public class CafeGame {
     }
 
     public void doTeardown(){
+        ServerLevel level = (ServerLevel) desk.getLevel();
+        for(Player player : level.players()){
+            ItemUtils.removeFreshnessForPlayer(player, uuid);
+        }
         onGameEvent(new GameInvalidatedEvent());
     }
 

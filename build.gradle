@@ -22,17 +22,31 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = '1.0'
 group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'modid'
-
+configurations {
+    library
+    shade // <- Create a 'shade' configuration
+    implementation.extendsFrom(shade) // <- Add the shade configuration to implementation
+}
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+// Used to manually add non-mc libraries to the runtime classpaths found in build/classpath
+// If you have any module issues, check these files to make sure there are no duplicate dependencies
+minecraft.runs.configureEach {
+    lazyToken('minecraft_classpath') {
+        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}
 minecraft {
     // The mappings can be changed at any time and must be in the following format.
     // Channel:   Version:
@@ -143,13 +157,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -157,7 +165,9 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.11'
-
+    shade fg.deobf("com.github.LlamaLad7:MixinExtras:0.1.1")
+    library fg.deobf("com.github.LlamaLad7:MixinExtras:0.1.1")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.1")
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 
@@ -176,12 +186,25 @@ jar {
         ])
     }
 }
+shadowJar {
+    configurations = [project.configurations.shade] // <- Tell shadowJar to shade dependencies from 'shade'
+    exclude 'software/bernie/example/**'
+    exclude 'assets/geckolib3/**'
+    exclude '**/*.java'
 
+    classifier ''
+    relocate 'com.llamalad7', 'shadowed.llamalad7'
+    finalizedBy 'reobfShadowJar' // <- Finish shading with reobfuscation
+    mergeServiceFiles()
+}
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 // publish.dependsOn('reobfJar')
+reobf { // <- Add the output of shadowJar to reobfuscation, so shadowed content is reobfuscated
+    shadowJar {}
+}
 
 publishing {
     publications {

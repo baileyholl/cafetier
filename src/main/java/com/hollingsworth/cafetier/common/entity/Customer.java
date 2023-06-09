@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.common.entity;
 
+import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.api.game_events.CustomerDiedEvent;
 import com.hollingsworth.cafetier.api.game_events.InteractEvent;
@@ -214,10 +215,11 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
     }
 
     public void loseHappiness(int amount){
+        var currentHappyIcon = this.getHappinessIcon();
         this.setHappiness(this.getHappiness() - amount);
-        if(angryParticleCD == 0) {
+        var nextHappyIcon = this.getHappinessIcon();
+        if(!currentHappyIcon.equals(nextHappyIcon)) {
             angryAnimate();
-            angryParticleCD = 20;
         }
         if(this.getHappiness() <= 0){
             this.onHappinessZero();
@@ -259,7 +261,6 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
         return this.entityData.get(MAX_HAPPINESS);
     }
 
-
     public void setDesiredItem(ItemStack desiredItem){
         this.entityData.set(DESIRED_ITEM, desiredItem);
     }
@@ -298,5 +299,24 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
 
     public void setDisplayIcon(String displayIcon){
         this.entityData.set(DISPLAY_ICON, displayIcon);
+    }
+
+    public static final String VERY_HAPPY = Cafetier.MODID + ":textures/gui/icons/very_happy.png";
+    public static final String HAPPY = Cafetier.MODID + ":textures/gui/icons/happy.png";
+    public static final String NEUTRAL = Cafetier.MODID + ":textures/gui/icons/neutral.png";
+    public static final String UNHAPPY = Cafetier.MODID + ":textures/gui/icons/unhappy.png";
+    public static final String VERY_UNHAPPY = Cafetier.MODID + ":textures/gui/icons/very_unhappy.png";
+
+    public String getHappinessIcon(){
+        if(getHappiness() >= this.getMaxHappiness()){
+            return VERY_HAPPY;
+        }else if(getHappiness() >= 75){
+            return HAPPY;
+        }else if(getHappiness() >= 50){
+            return NEUTRAL;
+        }else if(getHappiness() >= 30){
+            return UNHAPPY;
+        }
+        return VERY_UNHAPPY;
     }
 }

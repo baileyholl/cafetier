@@ -2,20 +2,23 @@ package com.hollingsworth.cafetier.common.entity;
 
 import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.common.util.RandUtil;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.npc.VillagerData;
-import net.minecraft.world.entity.npc.VillagerDataHolder;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class VillagerCustomer extends Customer implements VillagerDataHolder {
+
+    private static final EntityDataAccessor<VillagerData> DATA_VILLAGER_DATA = SynchedEntityData.defineId(VillagerCustomer.class, EntityDataSerializers.VILLAGER_DATA);
+
     public VillagerCustomer(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -43,6 +46,21 @@ public class VillagerCustomer extends Customer implements VillagerDataHolder {
         this.playSound(SoundEvents.VILLAGER_NO, 1.0f + (float) RandUtil.inRange(-0.2, 0.2), 1.0f + (float) RandUtil.inRange(-0.2, 0.2));
     }
 
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_VILLAGER_DATA, getRandomData());
+    }
+
+    public VillagerData getRandomData(){
+        var villagerTypes = new VillagerType[]{VillagerType.DESERT, VillagerType.JUNGLE, VillagerType.PLAINS, VillagerType.SAVANNA, VillagerType.SNOW, VillagerType.SWAMP, VillagerType.TAIGA};
+        var professions = new VillagerProfession[]{ VillagerProfession.ARMORER, VillagerProfession.BUTCHER, VillagerProfession.CARTOGRAPHER, VillagerProfession.CLERIC, VillagerProfession.FARMER, VillagerProfession.FISHERMAN, VillagerProfession.FLETCHER, VillagerProfession.LEATHERWORKER, VillagerProfession.LIBRARIAN, VillagerProfession.MASON, VillagerProfession.NITWIT, VillagerProfession.NONE, VillagerProfession.SHEPHERD, VillagerProfession.TOOLSMITH, VillagerProfession.WEAPONSMITH};
+        var levels = new int[]{1, 2, 3, 4, 5};
+        return new VillagerData(villagerTypes[random.nextInt(villagerTypes.length)],
+                professions[random.nextInt(0, professions.length)],
+                levels[random.nextInt(0, levels.length)]);
+    }
+
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
@@ -57,7 +75,7 @@ public class VillagerCustomer extends Customer implements VillagerDataHolder {
 
     @Override
     public VillagerData getVillagerData() {
-        return new VillagerData(VillagerType.DESERT, VillagerProfession.ARMORER, 1);
+        return this.entityData.get(DATA_VILLAGER_DATA);
     }
 
     @Override

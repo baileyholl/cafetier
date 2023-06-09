@@ -3,16 +3,20 @@ package com.hollingsworth.cafetier.api.statemachine.cafe;
 import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
+import com.hollingsworth.cafetier.api.wave.WaveSchedule;
 import org.jetbrains.annotations.Nullable;
 
-public class TakeBreakState implements IState {
+import java.util.List;
 
-    public CafeGame cafeGame;
+public class TakeBreakState extends GameState {
+
     public int ticksLeft;
+    public List<WaveSchedule> remainingSchedules;
 
-    public TakeBreakState(CafeGame cafeGame) {
-        this.cafeGame = cafeGame;
-        ticksLeft = 500;
+    public TakeBreakState(CafeGame cafeGame, List<WaveSchedule> remainingSchedules) {
+        super(cafeGame);
+        ticksLeft = 20 * 30;
+        this.remainingSchedules = remainingSchedules;
     }
 
     @Override
@@ -29,7 +33,7 @@ public class TakeBreakState implements IState {
     @Override
     public IState tick() {
         if(ticksLeft <= 0){
-            return new SpawnCustomerWavesState(cafeGame);
+            return new SpawnCustomerWavesState(game, remainingSchedules);
         }else{
             ticksLeft--;
         }

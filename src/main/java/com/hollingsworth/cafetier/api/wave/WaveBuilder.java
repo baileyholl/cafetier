@@ -12,25 +12,22 @@ import java.util.List;
 
 public class WaveBuilder {
 
-    public WaveSchedule waveSchedule;
     public List<BlockPos> spawnPoints;
     public CafeGame game;
-    public int difficulty;
 
-    public WaveBuilder(CafeGame game, int difficulty){
+    public WaveBuilder(CafeGame game){
         this.game = game;
         spawnPoints = game.spawnPositions;
-        this.difficulty = difficulty;
     }
 
 
     public WaveSchedule balancedSchedule(int wave){
         List<SpawnGroup> groups = new ArrayList<>();
         double minCustomers = Math.max(1, (double)game.numSeats / 3.0  + wave);
-        double maxCustomers = Math.max(2, (double)game.numSeats / 1.5 + wave);
+        double maxCustomers = Math.max(2, (double)game.numSeats / 2 + wave) + 1;
         double randomCustomers = RandUtil.inRange(minCustomers, maxCustomers);
         int numCustomers = (int) Math.round(randomCustomers);
-        int maxWaveTime = 20 * 60 * 5;
+        int maxWaveTime = 20 * 90 * 1;
         int numberSplits = 3;
         int ticksPerSplit = maxWaveTime / numberSplits;
         for(int i = 0; i < numberSplits; i++){

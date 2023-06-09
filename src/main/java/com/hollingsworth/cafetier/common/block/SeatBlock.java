@@ -84,7 +84,6 @@ public class SeatBlock extends HorizontalDirectionalBlock {
         if(world.isClientSide || entity == null){
             return;
         }
-        System.out.println("sitting " + entity);
         var seat = new SeatEntity(world, pos);
         seat.setPos(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
         world.addFreshEntity(seat);

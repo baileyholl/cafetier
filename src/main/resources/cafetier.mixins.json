@@ -3,10 +3,17 @@
   "package": "com.hollingsworth.cafetier.common.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "cafetier.refmap.json",
+  "plugin": "com.hollingsworth.cafetier.common.mixin.MixinPlugin",
   "client": [
   ],
   "mixins": [
-    "LivingEntityAccessor"
+    "CampfireTileMixin",
+    "CookingRecipeMixin",
+    "CraftingContainerAccessor",
+    "CraftingMenuAccessor",
+    "LivingEntityAccessor",
+    "ShapedRecipeMixin",
+    "ShapelessRecipeMixin"
   ],
   "minVersion": "0.8"
 }

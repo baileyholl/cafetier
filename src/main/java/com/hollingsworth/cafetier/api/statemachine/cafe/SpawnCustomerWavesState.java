@@ -3,16 +3,20 @@ package com.hollingsworth.cafetier.api.statemachine.cafe;
 import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
-import com.hollingsworth.cafetier.api.wave.WaveBuilder;
 import com.hollingsworth.cafetier.api.wave.WaveSchedule;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class SpawnCustomerWavesState extends GameState {
+
+    public List<WaveSchedule> waveSchedules;
     public WaveSchedule waveSchedule;
 
-    public SpawnCustomerWavesState(CafeGame cafeGame) {
+    public SpawnCustomerWavesState(CafeGame cafeGame, List<WaveSchedule> waveSchedules){
         super(cafeGame);
-        waveSchedule = new WaveBuilder(cafeGame, 1).balancedSchedule(0);
+        this.waveSchedules = waveSchedules;
+        waveSchedule = waveSchedules.remove(0);
     }
 
     @Override
@@ -24,8 +28,12 @@ public class SpawnCustomerWavesState extends GameState {
     @Nullable
     @Override
     public IState tick() {
-        if(waveSchedule.isDone()){
-            return new GameTeardownState();
+        if(waveSchedule.isDone() && game.customerManager.trackedCustomers.isEmpty()){
+            if(waveSchedules.isEmpty()) {
+                return new GameTeardownState();
+            }else{
+                return new TakeBreakState(game, waveSchedules);
+            }
         }else{
             waveSchedule.tick(game);
         }
