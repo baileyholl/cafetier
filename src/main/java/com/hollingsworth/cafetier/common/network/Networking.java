@@ -39,6 +39,11 @@ public class Networking {
                 CreateCafeServer::encode,
                 CreateCafeServer::new,
                 MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                StartGameServer.class,
+                StartGameServer::encode,
+                StartGameServer::new,
+                MessageHandler::handle);
     }
 
     public static void sendToNearby(Level world, BlockPos pos, Object toSend) {

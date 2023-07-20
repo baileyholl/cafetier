@@ -3,6 +3,7 @@ package com.hollingsworth.cafetier.client.gui;
 import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.common.network.CreateCafeServer;
 import com.hollingsworth.cafetier.common.network.Networking;
+import com.hollingsworth.cafetier.common.network.StartGameServer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -16,7 +17,9 @@ public class CreateCafeScreen extends ModScreen {
 
     public EditBox cafeName;
     public Button confirm;
-    BlockPos deskPos;
+    public Button startGame;
+    public BlockPos deskPos;
+
     public CreateCafeScreen(BlockPos deskPos) {
         super(290, 194);
         this.deskPos = deskPos;
@@ -26,13 +29,20 @@ public class CreateCafeScreen extends ModScreen {
     public void init() {
         super.init();
         cafeName = new EditBox(font, bookLeft, bookTop, 60, 12, Component.empty());
-        confirm = new Button(bookLeft, bookTop + 20, 60, 16, Component.empty(), this::onCreate);
+        confirm = new Button(bookLeft, bookTop + 20, 60, 16, Component.literal("create"), this::onCreate);
+        startGame = new Button(bookLeft, bookTop + 40, 60, 16, Component.literal("Start Game"), this::startGame);
         addRenderableWidget(cafeName);
         addRenderableWidget(confirm);
+        addRenderableWidget(startGame);
     }
 
     public void onCreate(Button button){
         Networking.sendToServer(new CreateCafeServer(deskPos, cafeName.getValue()));
+        minecraft.setScreen(null);
+    }
+
+    public void startGame(Button button){
+        Networking.sendToServer(new StartGameServer(deskPos));
         minecraft.setScreen(null);
     }
 
