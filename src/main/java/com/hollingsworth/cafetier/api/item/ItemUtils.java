@@ -28,10 +28,10 @@ public class ItemUtils {
         }
         Cafe cafe = game.cafe;
         long currentGameTime = level.getGameTime();
-        long previousStamp = CRAFT_TIMESTAMPS.computeIfAbsent(cafe.uuid, uuid -> currentGameTime);
+        long previousStamp = CRAFT_TIMESTAMPS.computeIfAbsent(cafe.cafeUUID, uuid -> currentGameTime);
         boolean outdated = currentGameTime - previousStamp > STAMP_LEEWAY;
         if(outdated){
-            CRAFT_TIMESTAMPS.put(cafe.uuid, currentGameTime);
+            CRAFT_TIMESTAMPS.put(cafe.cafeUUID, currentGameTime);
         }
         long stamp = outdated ? currentGameTime : previousStamp;
         return FreshnessData.assign(stack, stamp, game.uuid);

@@ -207,7 +207,7 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
     }
 
     public int maxWaitToPay(){
-        return 20 * 10;
+        return 20 * 20;
     }
 
     public float scoreModifier(){

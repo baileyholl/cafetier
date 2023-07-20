@@ -55,11 +55,11 @@ public class GoToCafeState extends CustomerState{
         }
         if(enteredCafe){
             timeInCafe++;
-            if(timeInCafe > 60){
+            if(timeInCafe > 6 * 20){
                 return new WaitForSeatingState(customer);
             }
         }
-        if(BlockUtil.distanceBetween(targetPos, customer.blockPosition()) <= 2.5)
+        if(BlockUtil.distanceBetween(targetPos, customer.blockPosition()) <= 1.5)
             return new WaitForSeatingState(customer);
         return null;
     }

@@ -1,9 +1,10 @@
 package com.hollingsworth.cafetier.common.block;
 
-import com.hollingsworth.cafetier.api.DeedData;
-import com.hollingsworth.cafetier.common.item.DeedItem;
+import com.hollingsworth.cafetier.common.network.Networking;
+import com.hollingsworth.cafetier.common.network.OpenCreateScreen;
 import com.hollingsworth.cafetier.common.util.ITickableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,15 +31,16 @@ public class ManagementDesk extends Block implements ITickableBlock {
         var heldStack = pPlayer.getItemInHand(pHand);
         var tile = (ManagementDeskEntity) pLevel.getBlockEntity(pPos);
         if(tile != null){
-            if(!heldStack.isEmpty() && heldStack.getItem() instanceof DeedItem) {
-                var deedData = new DeedData(heldStack);
-                if (deedData.getUuid() != null) {
-                    tile.setCafe(deedData.getUuid());
-                }
-                return InteractionResult.SUCCESS;
-            }else if(tile.getCafe() != null){
-                tile.getCafe().startGame(tile, pPlayer);
-            }
+            Networking.sendToPlayerClient(new OpenCreateScreen(pPos), (ServerPlayer) pPlayer);
+//            if(!heldStack.isEmpty() && heldStack.getItem() instanceof DeedItem) {
+//                var deedData = new DeedData(heldStack);
+//                if (deedData.getUuid() != null) {
+//                    tile.setCafe(deedData.getUuid());
+//                }
+//                return InteractionResult.SUCCESS;
+//            }else if(tile.getCafe() != null){
+//                tile.getCafe().startGame(tile, pPlayer);
+//            }
         }
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }

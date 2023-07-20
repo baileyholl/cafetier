@@ -11,24 +11,36 @@ import net.minecraft.world.phys.AABB;
 import java.util.UUID;
 
 public class Cafe {
-    public UUID uuid;
+    public String name;
+    public UUID cafeUUID;
+    public UUID ownerUUID;
     public BlockPos deskPos;
     private CafeGame game = null;
 
-    public Cafe(UUID uuid) {
-        this.uuid = uuid;
+    private Cafe(UUID cafeUUID, String name, UUID ownerUUID) {
+        this.cafeUUID = cafeUUID;
+        this.ownerUUID = ownerUUID;
+        this.name = name;
         this.deskPos = null;
     }
 
+    public static Cafe create(UUID ownerUUID, String name){
+        return new Cafe(UUID.randomUUID(), name, ownerUUID);
+    }
+
     public Cafe(CompoundTag tag){
-        this.uuid = tag.getUUID("uuid");
+        this.cafeUUID = tag.getUUID("uuid");
         this.deskPos = BlockPos.of(tag.getLong("blockPos"));
+        this.name = tag.getString("name");
     }
 
     public CompoundTag save(CompoundTag tag){
-        tag.putUUID("uuid", uuid);
+        tag.putUUID("uuid", cafeUUID);
         if(deskPos != null) {
             tag.putLong("blockPos", deskPos.asLong());
+        }
+        if(name != null){
+            tag.putString("name", name);
         }
         return tag;
     }
@@ -54,6 +66,6 @@ public class Cafe {
     }
 
     public AABB getBounds(){
-        return new AABB(deskPos).inflate(5);
+        return new AABB(deskPos).inflate(20);
     }
 }

@@ -21,7 +21,8 @@ public class DeskRenderer implements BlockEntityRenderer<ManagementDeskEntity> {
     public void render(ManagementDeskEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
 
         BlockPos blockpos = new BlockPos(0,0,0);
-        Vec3i vec3i = new Vec3i(5, 5, 5);
+        int size = 20;
+        Vec3i vec3i = new Vec3i(size, size, size);
         if (vec3i.getX() >= 1 && vec3i.getY() >= 1 && vec3i.getZ() >= 1) {
             double d0 = (double)blockpos.getX();
             double d1 = (double)blockpos.getZ();
@@ -48,7 +49,7 @@ public class DeskRenderer implements BlockEntityRenderer<ManagementDeskEntity> {
             float f2 = 0.5F;
             VertexConsumer vertexconsumer = pBufferSource.getBuffer(RenderType.lines());
             if (true) {
-                LevelRenderer.renderLineBox(pPoseStack, vertexconsumer, new AABB(new BlockPos(0,0,0)).inflate(5), 0.9F, 0.9F, 0.9F, 1.0f);
+                LevelRenderer.renderLineBox(pPoseStack, vertexconsumer, new AABB(new BlockPos(0,0,0)).inflate(size), 0.9F, 0.9F, 0.9F, 1.0f);
             }
         }
 

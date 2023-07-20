@@ -29,6 +29,16 @@ public class Networking {
                 SyncGameClient::toBytes,
                 SyncGameClient::new,
                 SyncGameClient::onMessage);
+        INSTANCE.registerMessage(nextID(),
+                OpenCreateScreen.class,
+                OpenCreateScreen::encode,
+                OpenCreateScreen::new,
+                MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                CreateCafeServer.class,
+                CreateCafeServer::encode,
+                CreateCafeServer::new,
+                MessageHandler::handle);
     }
 
     public static void sendToNearby(Level world, BlockPos pos, Object toSend) {
@@ -42,6 +52,7 @@ public class Networking {
     public static void sendToNearby(Level world, Entity e, Object toSend) {
         sendToNearby(world, e.blockPosition(), toSend);
     }
+
 
     public static void sendToPlayerClient(Object msg, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), msg);

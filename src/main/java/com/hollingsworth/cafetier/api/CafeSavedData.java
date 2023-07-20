@@ -28,12 +28,12 @@ public class CafeSavedData extends SavedData {
         var cafes = tag.getList("CafeList", 10);
         for(int i = 0; i < cafes.size(); i++){
             var cafe = new Cafe(cafes.getCompound(i));
-            cafeMap.put(cafe.uuid, cafe);
+            cafeMap.put(cafe.cafeUUID, cafe);
         }
     }
 
     public void addCafe(Cafe cafe){
-        cafeMap.put(cafe.uuid, cafe);
+        cafeMap.put(cafe.cafeUUID, cafe);
     }
 
     public Cafe getCafe(UUID uuid){
