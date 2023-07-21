@@ -90,7 +90,7 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(CAN_BE_SEATED, false);
-        this.entityData.define(HAPPINESS, 100);
+        this.entityData.define(HAPPINESS, getStartingHappiness());
         this.entityData.define(MAX_HAPPINESS, 100);
         this.entityData.define(DESIRED_ITEM, ItemStack.EMPTY);
         this.entityData.define(EATING_AT, BlockPos.ZERO);
@@ -215,6 +215,9 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
     }
 
     public void loseHappiness(int amount){
+        if(amount >= 0){
+            return;
+        }
         var currentHappyIcon = this.getHappinessIcon();
         this.setHappiness(this.getHappiness() - amount);
         var nextHappyIcon = this.getHappinessIcon();
@@ -226,6 +229,14 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
         }
     }
 
+    public void addHappiness(int amount){
+        if(this.getHappiness() > getMaxHappiness() || amount <= 0){
+            return;
+        }
+        this.setHappiness(this.getHappiness() + amount);
+        happyAnimate();
+    }
+
     @Override
     public void getTooltip(List<Component> tooltip) {
         tooltip.add(Component.literal("Happiness: " + this.getHappiness()));
@@ -235,6 +246,10 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
 
     public void angryAnimate(){
         this.addParticlesAroundSelf(ParticleTypes.ANGRY_VILLAGER);
+    }
+
+    public void happyAnimate(){
+        this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
     }
 
     public void setCanBeSeated(boolean canBeSeated){
@@ -299,6 +314,10 @@ public abstract class Customer extends PathfinderMob implements ITooltipProvider
 
     public void setDisplayIcon(String displayIcon){
         this.entityData.set(DISPLAY_ICON, displayIcon);
+    }
+
+    public int getStartingHappiness(){
+        return 60;
     }
 
     public static final String VERY_HAPPY = Cafetier.MODID + ":textures/gui/icons/very_happy.png";

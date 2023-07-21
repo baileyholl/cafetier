@@ -47,6 +47,12 @@ public class VillagerCustomer extends Customer implements VillagerDataHolder {
     }
 
     @Override
+    public void happyAnimate() {
+        super.happyAnimate();
+        this.playSound(SoundEvents.VILLAGER_YES, 1.0f + (float) RandUtil.inRange(-0.2, 0.2), 1.0f + (float) RandUtil.inRange(-0.2, 0.2));
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_VILLAGER_DATA, getRandomData());

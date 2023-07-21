@@ -3,6 +3,7 @@ package com.hollingsworth.cafetier.api;
 import com.hollingsworth.cafetier.api.game_events.CustomerSpawnedEvent;
 import com.hollingsworth.cafetier.api.game_events.GameInvalidatedEvent;
 import com.hollingsworth.cafetier.api.item.ItemUtils;
+import com.hollingsworth.cafetier.api.loot.LootManager;
 import com.hollingsworth.cafetier.api.statemachine.IState;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.api.statemachine.SimpleStateMachine;
@@ -42,6 +43,7 @@ public class CafeGame {
     public SimpleStateMachine<IState<?>, IStateEvent> gameSm;
     public CustomerManager customerManager = new CustomerManager();
     public ScoreManager scoreManager = new ScoreManager();
+    public LootManager lootManager = new LootManager();
     public List<ItemStack> menuStacks = new ArrayList<>();
     public List<BlockPos> waitingPositions = new ArrayList<>();
     public List<BlockPos> spawnPositions = new ArrayList<>();
@@ -103,6 +105,7 @@ public class CafeGame {
         gameSm.onEvent(event);
         customerManager.onEvent(event);
         scoreManager.onEvent(event);
+        lootManager.onEvent(event);
     }
 
     public void spawnCustomer(Customer customer, BlockPos pos){

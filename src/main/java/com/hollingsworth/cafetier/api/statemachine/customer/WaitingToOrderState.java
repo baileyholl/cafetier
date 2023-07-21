@@ -7,15 +7,12 @@ import com.hollingsworth.cafetier.common.entity.Customer;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitingToOrderState extends CustomerState {
+public class WaitingToOrderState extends CustomerPatienceState {
 
-    public int ticksWaited = 0;
-    public int maxWait;
     public ItemStack desiredStack;
 
     public WaitingToOrderState(Customer customer){
-        super(customer);
-        maxWait = customer.maxWaitToOrder();
+        super(customer, customer.maxWaitToOrder());
         desiredStack = getGame().menuStacks.get(customer.getRandom().nextInt(customer.game.menuStacks.size()));
     }
 
@@ -32,12 +29,9 @@ public class WaitingToOrderState extends CustomerState {
     @Nullable
     @Override
     public CustomerState tick() {
+        super.tick();
         if(customer.getSeatedPos() == null){
             return new NeedsReseatedState(customer, this);
-        }
-        ticksWaited++;
-        if(ticksWaited >= maxWait && ticksWaited % 20 == 0){
-            customer.loseHappiness(1);
         }
         return null;
     }

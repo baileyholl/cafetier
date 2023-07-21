@@ -9,12 +9,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitingForFoodState extends CustomerState {
-
-    public int ticksWaiting;
+public class WaitingForFoodState extends CustomerPatienceState {
 
     public WaitingForFoodState(Customer customer, ItemStack desiredStack) {
-        super(customer);
+        super(customer, customer.maxWaitForFood());
         customer.setDesiredItem(desiredStack.copy());
     }
 
@@ -31,14 +29,9 @@ public class WaitingForFoodState extends CustomerState {
     @Nullable
     @Override
     public CustomerState tick() {
+        super.tick();
         if (customer.getSeatedPos() == null) {
             return new NeedsReseatedState(customer, this);
-        }
-        ticksWaiting++;
-        if (ticksWaiting > customer.maxWaitForFood()) {
-            if (ticksWaiting % 20 == 0) {
-                customer.loseHappiness(1);
-            }
         }
         return null;
     }
@@ -58,11 +51,16 @@ public class WaitingForFoodState extends CustomerState {
                     if (servedEvent.pos.equals(possiblePlate) && !servedEvent.isClaimed()) {
                         servedEvent.claim(customer);
                         customer.setEatingAt(servedEvent.pos);
+                        addBonuses();
                         return new EatingState(customer, plateEntity.getStack().copy(), servedEvent.pos);
                     }
                 }
             }
         }
         return null;
+    }
+
+    public void addBonuses() {
+        customer.addHappiness(getSecondsRemaining() / 2);
     }
 }

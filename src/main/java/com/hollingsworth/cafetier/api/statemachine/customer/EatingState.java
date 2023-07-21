@@ -44,7 +44,7 @@ public class EatingState extends CustomerState {
         boolean plateLoaded = customer.getLevel().isLoaded(eatingAt) && customer.getLevel().getBlockEntity(eatingAt) instanceof PlateEntity;
         if(!plateLoaded || !customer.desiresStack(eatingStack)){
             customer.loseHappiness(10);
-            return new WaitingForFoodState(customer, customer.getDesiredItem());
+            return new FoodStolenState(customer, customer.getDesiredItem());
         }
         PlateEntity plateEntity = (PlateEntity) customer.getLevel().getBlockEntity(eatingAt);
         ItemStack stack = plateEntity.getStack();

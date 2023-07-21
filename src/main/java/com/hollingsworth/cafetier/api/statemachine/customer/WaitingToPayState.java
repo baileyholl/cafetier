@@ -7,14 +7,10 @@ import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import org.jetbrains.annotations.Nullable;
 
-public class WaitingToPayState extends CustomerState {
-
-    public int ticksWaited = 0;
-    public int maxWait;
+public class WaitingToPayState extends CustomerPatienceState {
 
     public WaitingToPayState(Customer customer){
-        super(customer);
-        maxWait = customer.maxWaitToPay();
+        super(customer, customer.maxWaitToPay());
     }
 
     @Override
@@ -25,16 +21,6 @@ public class WaitingToPayState extends CustomerState {
     @Override
     public void onEnd() {
         customer.setDisplayIcon("");
-    }
-
-    @Nullable
-    @Override
-    public CustomerState tick() {
-        ticksWaited++;
-        if(ticksWaited >= maxWait && ticksWaited % 20 == 0){
-            customer.loseHappiness(1);
-        }
-        return null;
     }
 
     @Nullable
