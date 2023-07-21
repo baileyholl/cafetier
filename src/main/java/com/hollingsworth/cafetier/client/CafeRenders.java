@@ -4,6 +4,8 @@ import com.hollingsworth.cafetier.Cafetier;
 import com.hollingsworth.cafetier.common.block.CafeBlocks;
 import com.hollingsworth.cafetier.common.entity.CafeEntities;
 import com.hollingsworth.cafetier.common.util.GuiEntityInfoHUD;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -30,5 +32,7 @@ public class CafeRenders {
         event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "tooltip", GuiEntityInfoHUD.OVERLAY);
         event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "cafe_hud", CafeHUD.OVERLAY);
     }
+    public static MultiBufferSource.BufferSource bufferSource = MultiBufferSource.immediate(new BufferBuilder(256));
+
 
 }
