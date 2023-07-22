@@ -3,5 +3,13 @@
   "block.cafetier.dish": "Copper Plate",
   "block.cafetier.display_case": "Display Case",
   "block.cafetier.management_desk": "Management Desk",
-  "block.cafetier.oak_chair": "Oak Chair"
+  "block.cafetier.oak_chair": "Oak Chair",
+  "cafetier.create": "Create Cafe",
+  "cafetier.get_schematic": "Update Schematic",
+  "cafetier.no_bounds": "No boundary set. Update the boundary within the Management Desk menu.",
+  "cafetier.no_menu_items": "No menu items found. Add food to display cases within the cafe.",
+  "cafetier.no_spawn_positions": "No spawn positions found. Add more at least 10 blocks from the cafe boundary.",
+  "cafetier.set_boundary": "Cafe boundary set.",
+  "cafetier.start_game": "Start Game",
+  "cafetier.update_schematic": "Schematic created. Set the boundary and use on the desk to set the area."
 }

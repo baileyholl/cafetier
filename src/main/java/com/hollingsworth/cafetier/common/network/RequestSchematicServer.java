@@ -1,9 +1,10 @@
 package com.hollingsworth.cafetier.common.network;
 
 import com.hollingsworth.cafetier.api.Cafe;
-import com.hollingsworth.cafetier.api.CafeSavedData;
+import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
 import com.hollingsworth.cafetier.common.item.CafeItems;
 import com.hollingsworth.cafetier.common.item.Schematic;
+import com.hollingsworth.cafetier.common.util.ComponentUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,15 +15,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.UUID;
-
 public class RequestSchematicServer implements Message{
 
-    public UUID cafeUUID;
     public BlockPos deskPos;
 
-    public RequestSchematicServer(UUID cafeUUID, BlockPos deskPos) {
-        this.cafeUUID = cafeUUID;
+    public RequestSchematicServer(BlockPos deskPos) {
         this.deskPos = deskPos;
     }
 
@@ -32,26 +29,30 @@ public class RequestSchematicServer implements Message{
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeUUID(this.cafeUUID);
         buf.writeLong(this.deskPos.asLong());
     }
 
     @Override
     public void decode(FriendlyByteBuf buf) {
-        this.cafeUUID = buf.readUUID();
         this.deskPos = BlockPos.of(buf.readLong());
     }
 
     @Override
     public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player, NetworkEvent.Context context) {
-        Cafe cafe = CafeSavedData.from((ServerLevel) player.level).getCafe(this.cafeUUID);
+        ServerLevel level = player.getLevel();
+        ManagementDeskEntity desk = (ManagementDeskEntity) level.getBlockEntity(this.deskPos);
+        Cafe cafe = null;
+        if(desk != null){
+            cafe = desk.getCafe();
+        }
         if(cafe != null){
             ItemStack schematiStack = new ItemStack(CafeItems.SCHEMATIC);
             if(cafe.getBounds() != null){
-                Schematic.writeAABB(schematiStack, cafe.getBounds());
+                // Contract because bounds are written as the expanded to match the UI
+                Schematic.writeAABB(schematiStack, cafe.getBounds().contract(1,1,1));
             }
             player.level.addFreshEntity(new ItemEntity(player.level, deskPos.getX() + 0.5, deskPos.getY() + 1, deskPos.getZ() + 0.5, schematiStack));
-            player.sendSystemMessage(Component.translatable("cafetier.update_schematic"));
+            player.sendSystemMessage(Component.translatable("cafetier.update_schematic").withStyle(ComponentUtil.TAKE_ACTION_STYLE));
         }
     }
 }

@@ -18,6 +18,7 @@ import com.hollingsworth.cafetier.common.network.Networking;
 import com.hollingsworth.cafetier.common.network.SyncGameClient;
 import com.hollingsworth.cafetier.data.BlockTagProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -60,8 +61,17 @@ public class CafeGame {
         initBoundary((ServerLevel) desk.getLevel());
     }
 
-    public static CafeGame buildGame(Cafe cafe, ManagementDeskEntity desk){
+    public static CafeGame buildGame(Cafe cafe, ManagementDeskEntity desk, Player player){
         CafeGame game = new CafeGame(cafe, desk);
+        if(game.spawnPositions.isEmpty()){
+            player.sendSystemMessage(Component.translatable("cafetier.no_spawn_positions"));
+        }
+        if(game.menuStacks.isEmpty()){
+            player.sendSystemMessage(Component.translatable("cafetier.no_menu_items"));
+        }
+        if(cafe.getBounds() == null){
+            player.sendSystemMessage(Component.translatable("cafetier.no_bounds"));
+        }
         if(game.spawnPositions.isEmpty() || game.menuStacks.isEmpty() || !game.isValid()){
             return null;
         }

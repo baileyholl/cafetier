@@ -5,7 +5,6 @@ import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
 import com.hollingsworth.cafetier.common.util.SerializeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
@@ -56,10 +55,8 @@ public class Cafe {
     }
 
     public void startGame(ManagementDeskEntity desk, Player player){
-        game = CafeGame.buildGame(this, desk);
+        game = CafeGame.buildGame(this, desk, player);
         if(game == null){
-            player.sendSystemMessage(Component.literal("Invalid game setup"));
-            game = null;
             return;
         }
         GameManager.addGame(desk.getLevel(), game);

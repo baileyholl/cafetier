@@ -39,23 +39,14 @@ public class ManagementDesk extends Block implements ITickableBlock {
                     AABB aabb = schematic.getAABB(heldStack);
                     if(aabb != null){
                         // Expand by 1 block in each direction to include the walls
-
                         tile.setBounds(aabb.expandTowards(1,1,1));
-                        pPlayer.sendSystemMessage(Component.literal("Set bound"));
+                        pPlayer.sendSystemMessage(Component.translatable("cafetier.set_boundary"));
+                        heldStack.shrink(1);
                     }
                 }
             }else {
                 Networking.sendToPlayerClient(new OpenCreateScreen(pPos), (ServerPlayer) pPlayer);
             }
-//            if(!heldStack.isEmpty() && heldStack.getItem() instanceof DeedItem) {
-//                var deedData = new DeedData(heldStack);
-//                if (deedData.getUuid() != null) {
-//                    tile.setCafe(deedData.getUuid());
-//                }
-//                return InteractionResult.SUCCESS;
-//            }else if(tile.getCafe() != null){
-//                tile.getCafe().startGame(tile, pPlayer);
-//            }
         }
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
