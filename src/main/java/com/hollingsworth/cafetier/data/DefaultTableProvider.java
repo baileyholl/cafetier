@@ -2,6 +2,7 @@ package com.hollingsworth.cafetier.data;
 
 import com.google.common.collect.ImmutableList;
 import com.hollingsworth.cafetier.Cafetier;
+import com.hollingsworth.cafetier.common.block.CafeBlocks;
 import com.hollingsworth.cafetier.common.block.RegistryWrapper;
 import com.hollingsworth.cafetier.common.entity.CafeEntities;
 import com.mojang.datafixers.util.Pair;
@@ -52,7 +53,10 @@ public class DefaultTableProvider extends LootTableProvider {
 
         @Override
         protected void addTables() {
-//            registerDropSelf(BlockRegistry.ENCHANTED_SPELL_TURRET);
+            registerDropSelf(CafeBlocks.DISPLAY_BLOCK);
+            registerDropSelf(CafeBlocks.OAK_CHAIR);
+            registerDropSelf(CafeBlocks.PLATE_BLOCK);
+            registerDropSelf(CafeBlocks.CASH_REGISTER);
 
         }
 

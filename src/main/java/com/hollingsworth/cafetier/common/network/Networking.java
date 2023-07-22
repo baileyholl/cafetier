@@ -44,6 +44,12 @@ public class Networking {
                 StartGameServer::encode,
                 StartGameServer::new,
                 MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                RequestSchematicServer.class,
+                RequestSchematicServer::encode,
+                RequestSchematicServer::new,
+                MessageHandler::handle);
+
     }
 
     public static void sendToNearby(Level world, BlockPos pos, Object toSend) {
