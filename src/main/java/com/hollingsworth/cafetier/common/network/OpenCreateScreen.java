@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class OpenCreateScreen implements Message {
     public BlockPos deskPos;
+
     public OpenCreateScreen(BlockPos deskPos) {
         this.deskPos = deskPos;
     }

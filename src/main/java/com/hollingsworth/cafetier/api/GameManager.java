@@ -36,6 +36,23 @@ public class GameManager {
         }
     }
 
+    public static void endGame(ServerLevel level, UUID gameId){
+        String key = level.dimension().location().toString();
+        if(games.containsKey(key)){
+            CafeGame toRemove = null;
+            for(CafeGame game : games.get(key)){
+                if(game.uuid.equals(gameId)){
+                    toRemove = game;
+                    break;
+                }
+            }
+            if(toRemove != null){
+                toRemove.doTeardown();
+                games.get(key).remove(toRemove);
+            }
+        }
+    }
+
     public static CafeGame getGame(ServerLevel level, BlockPos pos){
         String key = level.dimension().location().toString();
         if(games.containsKey(key)){

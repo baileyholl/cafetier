@@ -12,38 +12,38 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-public class StartGameServer implements Message{
+public class CancelGameServer implements Message{
+    public BlockPos pos;
 
-    public BlockPos cafePos;
-
-    public StartGameServer(BlockPos cafePos) {
-        this.cafePos = cafePos;
+    public CancelGameServer(BlockPos pos) {
+        this.pos = pos;
     }
 
-    public StartGameServer(FriendlyByteBuf buf) {
+    public CancelGameServer(FriendlyByteBuf buf) {
         decode(buf);
     }
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeLong(cafePos.asLong());
+        buf.writeLong(pos.asLong());
     }
 
     @Override
     public void decode(FriendlyByteBuf buf) {
-        cafePos = BlockPos.of(buf.readLong());
+        pos = BlockPos.of(buf.readLong());
     }
 
     @Override
     public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player, NetworkEvent.Context context) {
-        if(player.level.getBlockEntity(cafePos) instanceof ManagementDeskEntity managementDeskEntity){
+        if(player.level.getBlockEntity(pos) instanceof ManagementDeskEntity managementDeskEntity){
             Cafe cafe = managementDeskEntity.getCafe();
             if(cafe != null){
                 CafeGame game = GameManager.getGame((ServerLevel) player.level, cafe.cafeUUID);
-                if(game == null){
-                    cafe.startGame(managementDeskEntity, player);
+                if(game != null){
+                    GameManager.endGame((ServerLevel) player.level, game.uuid);
+                    player.sendSystemMessage(Component.translatable("cafetier.game_ended"));
                 }else{
-                    player.sendSystemMessage(Component.translatable("cafetier.game_already_running"));
+                    player.sendSystemMessage(Component.translatable("cafetier.already_ended"));
                 }
             }
         }

@@ -8,6 +8,7 @@ public class EditCafeServer implements Message{
         this.decode(buf);
     }
 
+
     @Override
     public void encode(FriendlyByteBuf buf) {
 

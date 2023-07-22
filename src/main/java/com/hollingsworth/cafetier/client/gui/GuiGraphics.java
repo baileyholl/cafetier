@@ -5,10 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 // Throwaway class to keep compat with 1.20 port
 public class GuiGraphics {
@@ -22,7 +20,7 @@ public class GuiGraphics {
         GuiComponent.blit(poseStack, pX, pY, pWidth, pHeight, pUOffset, pVOffset, pWidth, pHeight, pTextureWidth, pTextureHeight);
     }
 
-    public void renderComponentTooltip(Font font, List<Component> tooltip, int mouseX, int mouseY) {
-
+    public void drawString(Font pFont, @Nullable String pText, int pX, int pY, int pColor, boolean pDropShadow) {
+        pFont.draw(poseStack, pText, pX, pY, pColor);
     }
 }

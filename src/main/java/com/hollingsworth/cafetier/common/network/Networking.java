@@ -49,6 +49,27 @@ public class Networking {
                 RequestSchematicServer::encode,
                 RequestSchematicServer::new,
                 MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                CancelGameServer.class,
+                CancelGameServer::encode,
+                CancelGameServer::new,
+                MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                EditCafeServer.class,
+                EditCafeServer::encode,
+                EditCafeServer::new,
+                MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                SetCafeServer.class,
+                SetCafeServer::encode,
+                SetCafeServer::new,
+                MessageHandler::handle);
+        INSTANCE.registerMessage(nextID(),
+                OpenViewScreen.class,
+                OpenViewScreen::encode,
+                OpenViewScreen::new,
+                MessageHandler::handle);
+
 
     }
 

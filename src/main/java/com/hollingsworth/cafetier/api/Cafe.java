@@ -5,6 +5,7 @@ import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
 import com.hollingsworth.cafetier.common.util.SerializeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
@@ -55,10 +56,21 @@ public class Cafe {
     }
 
     public void startGame(ManagementDeskEntity desk, Player player){
-        game = CafeGame.buildGame(this, desk, player);
-        if(game == null){
+        CafeGame game = CafeGame.buildGame(this, desk);
+        if(game.spawnPositions.isEmpty()){
+            player.sendSystemMessage(Component.translatable("cafetier.no_spawn_positions"));
+        }
+        if(game.menuStacks.isEmpty()){
+            player.sendSystemMessage(Component.translatable("cafetier.no_menu_items"));
+        }
+        if(getBounds() == null){
+            player.sendSystemMessage(Component.translatable("cafetier.no_bounds"));
+        }
+        if(!game.isValid()){
             return;
         }
+        player.sendSystemMessage(Component.translatable("cafetier.game_starting"));
+        this.game = game;
         GameManager.addGame(desk.getLevel(), game);
     }
 

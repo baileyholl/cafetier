@@ -3,6 +3,7 @@ package com.hollingsworth.cafetier.common.block;
 import com.hollingsworth.cafetier.common.item.Schematic;
 import com.hollingsworth.cafetier.common.network.Networking;
 import com.hollingsworth.cafetier.common.network.OpenCreateScreen;
+import com.hollingsworth.cafetier.common.network.OpenViewScreen;
 import com.hollingsworth.cafetier.common.util.ITickableBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -45,7 +46,11 @@ public class ManagementDesk extends Block implements ITickableBlock {
                     }
                 }
             }else {
-                Networking.sendToPlayerClient(new OpenCreateScreen(pPos), (ServerPlayer) pPlayer);
+                if(tile.getCafe() == null) {
+                    Networking.sendToPlayerClient(new OpenCreateScreen(pPos), (ServerPlayer) pPlayer);
+                }else{
+                    Networking.sendToPlayerClient(new OpenViewScreen(tile), (ServerPlayer) pPlayer);
+                }
             }
         }
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);

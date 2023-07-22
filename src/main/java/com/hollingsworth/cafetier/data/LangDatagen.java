@@ -25,6 +25,11 @@ public class LangDatagen extends LanguageProvider {
         add("cafetier.no_spawn_positions", "No spawn positions found. Add more at least 10 blocks from the cafe boundary.");
         add("cafetier.no_bounds", "No boundary set. Update the boundary within the Management Desk menu.");
         add("cafetier.no_menu_items", "No menu items found. Add food to display cases within the cafe.");
+        add("cafetier.game_ended", "Game ended.");
+        add("cafetier.already_ended", "Game already ended.");
+        add("cafetier.game_already_running", "Game already running.");
+        add("cafetier.game_starting", "Game starting.");
+        add("cafetier.cafe_set", "Cafe set.");
     }
 
     public void add(ItemLike itemLike, String name) {
