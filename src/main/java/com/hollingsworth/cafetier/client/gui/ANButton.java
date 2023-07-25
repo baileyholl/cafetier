@@ -13,10 +13,6 @@ public class ANButton extends Button implements ITooltipProvider {
 		super(x, y, w, h, text, onPress);
 	}
 
-	public ANButton(int x, int y, int w, int h, OnPress onPress) {
-		this(x, y, w, h, Component.empty(), onPress);
-	}
-
 	public void setX(int i) {
 		x = i;
 	}

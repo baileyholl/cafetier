@@ -60,8 +60,8 @@ public class Cafe {
         if(game.spawnPositions.isEmpty()){
             player.sendSystemMessage(Component.translatable("cafetier.no_spawn_positions"));
         }
-        if(game.menuStacks.isEmpty()){
-            player.sendSystemMessage(Component.translatable("cafetier.no_menu_items"));
+        if(game.menuStacks.size() < 3){
+            player.sendSystemMessage(Component.translatable("cafetier.not_enough_menu_items"));
         }
         if(getBounds() == null){
             player.sendSystemMessage(Component.translatable("cafetier.no_bounds"));
