@@ -1,23 +1,25 @@
 package com.hollingsworth.cafetier.common.network;
 
-import com.hollingsworth.cafetier.api.Cafe;
-import com.hollingsworth.cafetier.api.CafeSavedData;
-import com.hollingsworth.cafetier.common.block.ManagementDeskEntity;
+import com.hollingsworth.cafetier.common.item.CafeItems;
+import com.hollingsworth.cafetier.common.util.ComponentUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-
-import java.util.UUID;
 
 public class CreateCafeServer implements Message{
     public String cafeName;
+    public String description;
     public BlockPos cafePos;
 
-    public CreateCafeServer(BlockPos cafePos, String cafeName) {
+    public CreateCafeServer(BlockPos cafePos, String cafeName, String description) {
         this.cafeName = cafeName;
         this.cafePos = cafePos;
+        this.description = description;
     }
 
     public CreateCafeServer(FriendlyByteBuf buf) {
@@ -28,21 +30,22 @@ public class CreateCafeServer implements Message{
     public void encode(FriendlyByteBuf buf) {
         buf.writeLong(cafePos.asLong());
         buf.writeUtf(cafeName);
+        buf.writeUtf(description);
     }
 
     @Override
     public void decode(FriendlyByteBuf buf) {
         cafePos = BlockPos.of(buf.readLong());
         cafeName = buf.readUtf();
+        description = buf.readUtf();
     }
 
     @Override
     public void onServerReceived(MinecraftServer minecraftServer, ServerPlayer player, NetworkEvent.Context context) {
-        UUID ownerUUID = player.getUUID();
-        Cafe cafe = Cafe.create(ownerUUID, cafeName);
-        CafeSavedData.from(player.getLevel()).addCafe(cafe);
-        if(player.level.getBlockEntity(cafePos) instanceof ManagementDeskEntity managementDeskEntity){
-            managementDeskEntity.setCafe(cafe.cafeUUID);
-        }
+        ItemStack schematiStack = new ItemStack(CafeItems.SCHEMATIC);
+        schematiStack.getOrCreateTag().putString("cafeName", cafeName);
+        schematiStack.getOrCreateTag().putString("description", description);
+        player.level.addFreshEntity(new ItemEntity(player.level, cafePos.getX() + 0.5, cafePos.getY() + 1, cafePos.getZ() + 0.5, schematiStack));
+        player.sendSystemMessage(Component.translatable("cafetier.complete_cafe").withStyle(ComponentUtil.TAKE_ACTION_STYLE));
     }
 }

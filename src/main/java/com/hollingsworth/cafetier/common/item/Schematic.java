@@ -1,5 +1,7 @@
 package com.hollingsworth.cafetier.common.item;
 
+import com.hollingsworth.cafetier.common.block.ManagementDesk;
+import com.hollingsworth.cafetier.common.util.ComponentUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,19 +29,22 @@ public class Schematic extends Item {
         if(pContext.getLevel().isClientSide){
             return InteractionResult.SUCCESS;
         }
-
+        if(pContext.getLevel().getBlockState(pContext.getClickedPos()).getBlock() instanceof ManagementDesk){
+            return InteractionResult.PASS;
+        }
         ItemStack heldStack = pContext.getItemInHand();
         CompoundTag tag = heldStack.getOrCreateTag();
-        if(tag.contains(POS1) && tag.contains(POS2)) {
-            if(pContext.getPlayer().isShiftKeyDown()){
-                tag.remove(POS1);
-                tag.remove(POS2);
-            }
+        if(pContext.getPlayer().isShiftKeyDown()){
+            tag.remove(POS1);
+            tag.remove(POS2);
+            pContext.getPlayer().sendSystemMessage(Component.translatable("cafetier.cleared_boundaries"));
         }
         else if(!tag.contains(POS1)){
             tag.putLong(POS1, pContext.getClickedPos().asLong());
+            pContext.getPlayer().sendSystemMessage(Component.translatable("cafetier.first_boundary"));
         }else if(!tag.contains(POS2)){
             tag.putLong(POS2, pContext.getClickedPos().asLong());
+            pContext.getPlayer().sendSystemMessage(Component.translatable("cafetier.second_boundary"));
         }
         return super.useOn(pContext);
     }
@@ -71,14 +76,25 @@ public class Schematic extends Item {
     public void appendHoverText(ItemStack pStack, @org.jetbrains.annotations.Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         BlockPos startPos = getPos(pStack, POS1);
         BlockPos endPos = getPos(pStack, POS2);
+
         if(startPos != null){
             pTooltipComponents.add(Component.literal("Start: " + startPos.getX() + ", " + startPos.getY() + ", " + startPos.getZ()));
         }
         if(endPos != null){
             pTooltipComponents.add(Component.literal("End: " + endPos.getX() + ", " + endPos.getY() + ", " + endPos.getZ()));
         }else{
-            pTooltipComponents.add(Component.literal("Right click on a block to set the end position"));
+            pTooltipComponents.add(Component.literal("Right click on a block to set the end position").withStyle(ComponentUtil.TAKE_ACTION_STYLE));
         }
-
+        CompoundTag tag = pStack.getTag();
+        if(tag != null){
+            String cafeName = tag.getString("cafeName");
+            String description = tag.getString("description");
+            if(!cafeName.isEmpty()) {
+                pTooltipComponents.add(Component.literal(cafeName));
+            }
+            if(!description.isEmpty()) {
+                pTooltipComponents.add(Component.literal(description));
+            }
+        }
     }
 }

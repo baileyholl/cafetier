@@ -82,7 +82,7 @@ public class ClientEvents {
         ItemStack stack = Minecraft.getInstance().player.getMainHandItem();
         if (!(stack.getItem() instanceof Schematic) || !stack.hasTag())
             return;
-        BlockPos firstPos = BlockPos.of(stack.getTag().getLong(Schematic.POS1));
+        BlockPos firstPos = stack.getTag().contains(Schematic.POS1) ? BlockPos.of(stack.getTag().getLong(Schematic.POS1)) : null;
         if (firstPos == null)
             return;
         BlockPos selectedPos = null;

@@ -18,7 +18,7 @@ public class CreateCafeScreen extends ModScreen {
     public EditBox cafeName;
     public Button confirm;
     public BlockPos deskPos;
-
+    EditBox descBox;
     public CreateCafeScreen(BlockPos deskPos) {
         super(290, 194);
         this.deskPos = deskPos;
@@ -27,13 +27,14 @@ public class CreateCafeScreen extends ModScreen {
     @Override
     public void init() {
         super.init();
-        cafeName = new EditBox(font, bookLeft + 80, bookTop + 40, 60, 12, Component.empty());
-        confirm = new Button(bookLeft + 40, bookTop + 150, 80, 20, Component.translatable("cafetier.create"), this::onCreate);
-
-        Button schematicButton = new Button(bookLeft + 25, bookTop + 100, 100, 20, Component.translatable("cafetier.get_schematic"), this::onSchematic);
+        cafeName = new EditBox(font, bookLeft + 50, bookTop + 36, 80, 14, Component.empty());
+        confirm = new Button(bookLeft + 40, bookTop + 150, 80, 20, Component.translatable("cafetier.create_schematic"), this::onCreate);
+        descBox = new EditBox(font, bookLeft + 20, bookTop + 70, 100, 14, Component.empty());
+//        Button schematicButton = new Button(bookLeft + 25, bookTop + 100, 100, 20, Component.translatable("cafetier.get_schematic"), this::onSchematic);
         addRenderableWidget(cafeName);
         addRenderableWidget(confirm);
-        addRenderableWidget(schematicButton);
+//        addRenderableWidget(schematicButton);
+        addRenderableWidget(descBox);
     }
 
     public void onSchematic(Button button){
@@ -42,7 +43,7 @@ public class CreateCafeScreen extends ModScreen {
     }
 
     public void onCreate(Button button){
-        Networking.sendToServer(new CreateCafeServer(deskPos, cafeName.getValue()));
+        Networking.sendToServer(new CreateCafeServer(deskPos, cafeName.getValue(), descBox.getValue()));
         minecraft.setScreen(null);
     }
 

@@ -1,12 +1,15 @@
 package com.hollingsworth.cafetier.common.block;
 
+import com.hollingsworth.cafetier.api.Cafe;
 import com.hollingsworth.cafetier.common.item.Schematic;
 import com.hollingsworth.cafetier.common.network.Networking;
 import com.hollingsworth.cafetier.common.network.OpenCreateScreen;
 import com.hollingsworth.cafetier.common.network.OpenViewScreen;
 import com.hollingsworth.cafetier.common.util.ITickableBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -36,13 +39,29 @@ public class ManagementDesk extends Block implements ITickableBlock {
         var tile = (ManagementDeskEntity) pLevel.getBlockEntity(pPos);
         if(tile != null){
             if(heldStack.getItem() instanceof Schematic schematic){
-                if(tile.getCafe() != null){
+                boolean makeNewCafe = heldStack.hasTag() && heldStack.getTag().contains("cafeName");
+                if(makeNewCafe){
+                    CompoundTag tag = heldStack.getTag();
+                    String cafeName = tag.getString("cafeName");
+                    String description = tag.getString("description");
+                    AABB aabb = schematic.getAABB(heldStack);
+                    if(aabb == null){
+                        pPlayer.sendSystemMessage(Component.translatable("cafetier.no_boundary"));
+                    }else{
+                        Cafe cafe = Cafe.create((ServerLevel) pPlayer.level, pPlayer.getUUID(), cafeName, description);
+                        cafe.setBounds(aabb);
+                        tile.setCafe(cafe.cafeUUID);
+                        pPlayer.sendSystemMessage(Component.translatable("cafetier.cafe_created"));
+                        heldStack.shrink(1);
+                    }
+                }else if(tile.getCafe() != null){
                     AABB aabb = schematic.getAABB(heldStack);
                     if(aabb != null){
                         // Expand by 1 block in each direction to include the walls
                         tile.setBounds(aabb.expandTowards(1,1,1));
                         pPlayer.sendSystemMessage(Component.translatable("cafetier.set_boundary"));
                         heldStack.shrink(1);
+
                     }
                 }
             }else {

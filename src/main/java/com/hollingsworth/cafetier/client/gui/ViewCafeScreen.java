@@ -111,7 +111,7 @@ public class ViewCafeScreen extends ModScreen{
     public void drawBackgroundElements(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         super.drawBackgroundElements(graphics, mouseX, mouseY, partialTicks);
         int color = -8355712;
-        graphics.drawString(font, cafe.name, 60, 20, color, false);
+        graphics.drawString(font, cafe.getName(), 60, 20, color, false);
         graphics.drawString(font, Component.translatable("cafetier.menu").getString(), 200, 20, color, false);
         graphics.drawString(font, Component.translatable("cafetier.seats", numSeats).getString(), 155, bookTop + 75, color, false);
         graphics.drawString(font, Component.translatable("cafetier.spawners", numSpawners).getString(), 155, bookTop + 85, color, false);

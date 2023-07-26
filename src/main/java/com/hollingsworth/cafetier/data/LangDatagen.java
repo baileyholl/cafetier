@@ -19,7 +19,7 @@ public class LangDatagen extends LanguageProvider {
         add(CafeBlocks.MANAGEMENT_DESK, "Management Desk");
         add("cafetier.update_schematic", "Schematic created. Set the boundary and use on the desk to set the area.");
         add("cafetier.set_boundary","Cafe boundary set.");
-        add("cafetier.create","Create Cafe");
+        add("cafetier.create_schematic","Set Boundary");
         add("cafetier.cancel_game", "Cancel Game");
         add("cafetier.start_game", "Start Game");
         add("cafetier.get_schematic","Update Schematic");
@@ -36,8 +36,15 @@ public class LangDatagen extends LanguageProvider {
         add("cafetier.not_enough_seats", "You need at least 4 seats in the Cafe.");
         add("cafetier.not_enough_menu_items", "You need at least 3 food items in Display Cases.");
         add("cafetier.change_cafe", "Change Cafe");
-        add("cafetier.cafe_name", "Cafe Name");
-        add("cafetier.cafe_description","Cafe Description");
+        add("cafetier.cafe_name", "Name");
+        add("cafetier.cafe_description","Description");
+        add("cafetier.complete_cafe","Use the Cafe Schematic to define the boundaries of the Cafe by selecting two opposite corners. Once compelted, use the schematic on the Desk.");
+        add("cafetier.create", "Create Cafe");
+        add("cafetier.no_boundary", "No boundary set. Use the Cafe Schematic to define the boundaries of the Cafe by selecting two opposite corners.");
+        add("cafetier.cleared_boundaries", "Cleared. Use on a block to set the first corner.");
+        add("cafetier.first_boundary", "First point set. Use on a block to set the second corner.");
+        add("cafetier.second_boundary", "Second point set. Use on a Desk to set the Cafe boundary. Sneak and use to clear.");
+        add("cafetier.cafe_created", "Cafe created. Use the desk to manage the Cafe.");
 
     }
 

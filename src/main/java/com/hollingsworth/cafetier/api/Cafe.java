@@ -6,6 +6,7 @@ import com.hollingsworth.cafetier.common.util.SerializeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
@@ -13,28 +14,33 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class Cafe {
-    public String name;
+    private String name;
+    private String description;
     public UUID cafeUUID;
     public UUID ownerUUID;
     public BlockPos deskPos;
     private AABB area;
     private CafeGame game = null;
 
-    private Cafe(UUID cafeUUID, String name, UUID ownerUUID) {
+    private Cafe(UUID cafeUUID, String name, String description, UUID ownerUUID) {
         this.cafeUUID = cafeUUID;
         this.ownerUUID = ownerUUID;
         this.name = name;
+        this.description = description;
         this.deskPos = null;
     }
 
-    public static Cafe create(UUID ownerUUID, String name){
-        return new Cafe(UUID.randomUUID(), name, ownerUUID);
+    public static Cafe create(ServerLevel serverLevel, UUID ownerUUID, String name, String description){
+        Cafe cafe = new Cafe(UUID.randomUUID(), name, description, ownerUUID);
+        CafeSavedData.from(serverLevel).addCafe(cafe);
+        return cafe;
     }
 
     public Cafe(CompoundTag tag){
         this.cafeUUID = tag.getUUID("uuid");
         this.deskPos = BlockPos.of(tag.getLong("blockPos"));
         this.name = tag.getString("name");
+        this.description = tag.getString("description");
         if(tag.contains("area")){
             CompoundTag areaTag = tag.getCompound("area");
             area = SerializeUtil.aabbFromTag(areaTag);
@@ -51,6 +57,9 @@ public class Cafe {
         }
         if(area != null){
             tag.put("area", SerializeUtil.aabbToTag(area));
+        }
+        if(description != null){
+            tag.putString("description", description);
         }
         return tag;
     }
@@ -90,5 +99,21 @@ public class Cafe {
 
     public void setBounds(AABB bounds){
         area = bounds;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
