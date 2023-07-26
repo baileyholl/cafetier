@@ -49,7 +49,7 @@ public class ManagementDesk extends Block implements ITickableBlock {
                         pPlayer.sendSystemMessage(Component.translatable("cafetier.no_boundary"));
                     }else{
                         Cafe cafe = Cafe.create((ServerLevel) pPlayer.level, pPlayer.getUUID(), cafeName, description);
-                        cafe.setBounds(aabb);
+                        cafe.setBounds(aabb.expandTowards(1,1,1));
                         tile.setCafe(cafe.cafeUUID);
                         pPlayer.sendSystemMessage(Component.translatable("cafetier.cafe_created"));
                         heldStack.shrink(1);

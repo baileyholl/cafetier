@@ -5,43 +5,56 @@ import com.hollingsworth.cafetier.api.CafeSavedData;
 import com.hollingsworth.cafetier.common.util.ITickable;
 import com.hollingsworth.cafetier.common.util.ITooltipProvider;
 import com.hollingsworth.cafetier.common.util.ModdedTile;
-import com.hollingsworth.cafetier.common.util.SerializeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
 
 public class ManagementDeskEntity extends ModdedTile implements ITickable, ITooltipProvider {
     private UUID uuid = null;
-    public AABB renderBB = null;
+
+    // Used for client syncing.
+    public Cafe cafe = null;
+
     public ManagementDeskEntity(BlockPos pos, BlockState state) {
         super(CafeBlocks.MANAGEMENT_DESK_ENTITY.get(), pos, state);
     }
 
     @Override
     public void tick() {
-
+        if(level.isClientSide){
+            return;
+        }
+        if(uuid != null && (cafe == null || cafe.cafeUUID.equals(uuid))){
+            cafe = getCafe();
+            updateBlock();
+        }
     }
 
     public void setCafe(UUID uuid){
+        if(level.isClientSide){
+            return;
+        }
         this.uuid = uuid;
         var cafe = CafeSavedData.from((ServerLevel) level).getCafe(uuid);
         if (cafe != null) {
             cafe.deskPos = worldPosition;
         }
+        this.cafe = getCafe();
         updateBlock();
     }
 
     public void setBounds(AABB aabb){
-        this.renderBB = null;
         Cafe cafe = getCafe();
         if(cafe != null){
-            this.renderBB = aabb;
             cafe.setBounds(aabb);
             resyncCafe();
         }
@@ -54,35 +67,43 @@ public class ManagementDeskEntity extends ModdedTile implements ITickable, ITool
         return null;
     }
 
-    public void  saveAdditional(CompoundTag pTag) {
+    public void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        if(uuid != null){
+        if(uuid != null) {
             pTag.putUUID("uuid", uuid);
         }
-        if(renderBB != null){
-            pTag.put("area", SerializeUtil.aabbToTag(renderBB));
+        if(cafe != null){
+            pTag.put("cafe", cafe.save(new CompoundTag()));
         }
     }
 
     public void load(CompoundTag pTag) {
         super.load(pTag);
         uuid = null;
-        renderBB = null;
+        cafe = null;
         if(pTag.contains("uuid")){
             uuid = pTag.getUUID("uuid");
         }
-        if(pTag.contains("area")){
-            CompoundTag areaTag = pTag.getCompound("area");
-            renderBB = SerializeUtil.aabbFromTag(areaTag);
+        if(pTag.contains("cafe")){
+            cafe = new Cafe(pTag.getCompound("cafe"));
         }
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        super.onDataPacket(net, pkt);
+    }
+
+    @Nullable
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return super.getUpdatePacket();
     }
 
     public void resyncCafe(){
         if(uuid != null){
             var cafe = getCafe();
-            if(cafe != null){
-                renderBB = cafe.getBounds();
-            }
+            this.cafe = cafe;
         }
         updateBlock();
     }

@@ -18,7 +18,10 @@ public class DeskRenderer implements BlockEntityRenderer<ManagementDeskEntity> {
     }
 
     public void render(ManagementDeskEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-        AABB renderBB = pBlockEntity.renderBB;
+        if(pBlockEntity.cafe == null){
+            return;
+        }
+        AABB renderBB = pBlockEntity.cafe.getBounds();
         if(renderBB == null)
             return;
         BlockPos deskPos = pBlockEntity.getBlockPos();
