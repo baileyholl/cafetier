@@ -18,8 +18,9 @@ public class CafeManager {
 
     public static Cafe getCafeByPos(ServerLevel level, BlockPos pos){
         for(var cafe : CafeSavedData.from(level).getCafes()){
-            if(level.isLoaded(pos) && level.getBlockEntity(cafe.deskPos) instanceof ManagementDeskEntity
-                    && cafe.getBounds().contains(pos.getX(), pos.getY(), pos.getZ())){
+            if(level.isLoaded(pos) && level.getBlockEntity(cafe.deskPos) instanceof ManagementDeskEntity desk
+                    && cafe.getBounds() != null && cafe.getBounds().contains(pos.getX(), pos.getY(), pos.getZ())
+                    && desk.cafe != null && desk.cafe.cafeUUID.equals(cafe.cafeUUID)){
                 return cafe;
             }
         }

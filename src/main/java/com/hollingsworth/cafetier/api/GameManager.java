@@ -58,7 +58,7 @@ public class GameManager {
         if(games.containsKey(key)){
             Cafe cafe = CafeManager.getCafeByPos(level, pos);
             for(CafeGame game : games.get(key)){
-                if(game.cafe.equals(cafe)){
+                if(game.cafe.cafeUUID.equals(cafe.cafeUUID)){
                     return game;
                 }
             }
