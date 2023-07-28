@@ -3,7 +3,6 @@ package com.hollingsworth.cafetier.api.wave;
 import com.hollingsworth.cafetier.api.CafeGame;
 import com.hollingsworth.cafetier.common.entity.Customer;
 import com.hollingsworth.cafetier.common.entity.VillagerCustomer;
-import com.hollingsworth.cafetier.common.util.RandUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -23,13 +22,17 @@ public class WaveBuilder {
 
     public WaveSchedule balancedSchedule(int wave){
         List<SpawnGroup> groups = new ArrayList<>();
-        double minCustomers = Math.max(1, (double)game.numSeats / 3.0  + wave);
-        double maxCustomers = Math.max(2, (double)game.numSeats / 3.0 + wave) + 1;
-        double randomCustomers = RandUtil.inRange(minCustomers, maxCustomers);
-        int numCustomers = (int) Math.round(randomCustomers);
-        int maxWaveTime = 20 * 180 * 1;
-        int numberSplits = 3;
+        double maxCustomers = game.numSeats * (1.5 + .25 * wave);
+        int maxWaveTime = 20 * 180 * 1 + wave * 20 * 15;
+        int numberSplits = 5;
+        int numCustomers = Math.max(1, (int) Math.round(maxCustomers) / numberSplits);
         int ticksPerSplit = maxWaveTime / numberSplits;
+        System.out.println("Max Customers: " + maxCustomers);
+        System.out.println("Max Wave Time: " + maxWaveTime);
+        System.out.println("Number Splits: " + numberSplits);
+        System.out.println("Num Customers: " + numCustomers);
+        System.out.println("Ticks Per Split: " + ticksPerSplit);
+
         for(int i = 0; i < numberSplits; i++){
             for(int j = 0; j < numCustomers; j++){
                 List<Customer> customers = new ArrayList<>();
