@@ -33,7 +33,6 @@ public class WaitForSeatingState extends CustomerPatienceState {
         }
         if(event instanceof CustomerSeatedEvent customerSeatedEvent && customerSeatedEvent.customer == customer){
             customer.acknowledgeServer(customerSeatedEvent.seatedBy);
-            System.out.println(getSecondsRemaining());
             customer.addHappiness(getSecondsRemaining() / 2);
             return new ReadingMenuState(customer);
         }

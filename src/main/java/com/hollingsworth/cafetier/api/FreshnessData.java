@@ -3,6 +3,7 @@ package com.hollingsworth.cafetier.api;
 import com.hollingsworth.cafetier.common.util.ItemstackData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
@@ -27,6 +28,14 @@ public class FreshnessData extends ItemstackData {
         this.createdStamp = createdStamp;
         this.gameUUID = gameUUID;
         writeItem();
+    }
+
+    public boolean exists(){
+        return createdStamp != 0;
+    }
+
+    public int getAgeSeconds(Level level){
+        return (int)(level.getGameTime() - createdStamp) / 20;
     }
 
     public static ItemStack assign(ItemStack stack, long createdStamp, UUID gameUUID){

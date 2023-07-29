@@ -42,7 +42,7 @@ public class PlateBlock extends SingleItemBlock implements ITickableBlock {
     public void setStack(SingleItemTile tile, Player player) {
         super.setStack(tile, player);
         if(tile.getLevel() instanceof ServerLevel serverLevel) {
-            CafeManager.postCafeEvent(new FoodServedEvent(tile.getBlockPos()), serverLevel, tile.getBlockPos());
+            CafeManager.postCafeEvent(new FoodServedEvent(tile.getBlockPos(), tile.stack.copy()), serverLevel, tile.getBlockPos());
         }
     }
 

@@ -128,7 +128,7 @@ public class CafeGame {
     }
 
     public void sendPacketToClients(){
-        CafeClientData cafeClientData = new CafeClientData(scoreManager.getScore(), customerManager.trackedCustomers.size(), 100);
+        CafeClientData cafeClientData = new CafeClientData(scoreManager.getScore(), customerManager.trackedCustomers.size(), 100, gameSm.getCurrentState().getClass().getSimpleName());
         ServerLevel level = (ServerLevel) desk.getLevel();
         for(ServerPlayer serverPlayer : level.getPlayers(p -> cafe.getBounds().contains(p.position()))){
             Networking.sendToPlayerClient(new SyncGameClient(cafeClientData), serverPlayer);

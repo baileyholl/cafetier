@@ -21,9 +21,9 @@ public class CustomerSM extends SimpleStateMachine<CustomerState, IStateEvent> {
     @Override
     protected void changeState(@NotNull CustomerState nextState) {
         super.changeState(nextState);
-        if(currentState != null && DEBUG){
-            customer.setCustomName(Component.literal(currentState.getClass().getSimpleName()));
-        }
+//        if(currentState != null && DEBUG){
+//            customer.setCustomName(Component.literal(currentState.getClass().getSimpleName()));
+//        }
     }
 
     public void setState(@NotNull CustomerState state){

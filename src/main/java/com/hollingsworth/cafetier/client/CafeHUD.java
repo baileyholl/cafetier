@@ -19,5 +19,6 @@ public class CafeHUD {
             return;
         mc.font.drawShadow(poseStack, "Score: " + ClientInfo.cafeClientData.score, 10, mc.getWindow().getGuiScaledHeight() - 45, 0xFFFFFF);
         mc.font.drawShadow(poseStack, "Num customers: " + ClientInfo.cafeClientData.customersRemaining, 10, mc.getWindow().getGuiScaledHeight() - 30, 0xFFFFFF);
+        mc.font.drawShadow(poseStack, "State: " + ClientInfo.cafeClientData.smState, 10, mc.getWindow().getGuiScaledHeight() - 15, 0xFFFFFF);
     }
 }

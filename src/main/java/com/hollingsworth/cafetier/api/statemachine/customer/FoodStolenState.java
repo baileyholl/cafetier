@@ -18,9 +18,4 @@ public class FoodStolenState extends WaitingForFoodState {
         }
         return null;
     }
-
-    @Override
-    public void addBonuses() {
-
-    }
 }

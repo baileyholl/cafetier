@@ -10,16 +10,9 @@ public class SimpleStateMachine<State extends IState, Event extends IStateEvent>
     public SimpleStateMachine(@Nonnull State initialState) {
         currentState = initialState;
         currentState.onStart();
-        if(DEBUG){
-            System.out.println("Starting state machine with state " + currentState.getClass().getSimpleName());
-            System.out.println("=====");
-        }
     }
 
     protected void changeState(@Nonnull State nextState) {
-        if(DEBUG){
-            System.out.println("Changing state from " + currentState.getClass().getSimpleName() + " to " + nextState.getClass().getSimpleName());
-        }
         currentState.onEnd();
         currentState = nextState;
         currentState.onStart();

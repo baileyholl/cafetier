@@ -1,5 +1,6 @@
 package com.hollingsworth.cafetier.api.statemachine.customer;
 
+import com.hollingsworth.cafetier.api.FreshnessData;
 import com.hollingsworth.cafetier.api.game_events.FoodServedEvent;
 import com.hollingsworth.cafetier.api.statemachine.IStateEvent;
 import com.hollingsworth.cafetier.common.block.PlateEntity;
@@ -51,7 +52,7 @@ public class WaitingForFoodState extends CustomerPatienceState {
                     if (servedEvent.pos.equals(possiblePlate) && !servedEvent.isClaimed()) {
                         servedEvent.claim(customer);
                         customer.setEatingAt(servedEvent.pos);
-                        addBonuses();
+                        addBonuses(servedEvent.food);
                         return new EatingState(customer, plateEntity.getStack().copy(), servedEvent.pos);
                     }
                 }
@@ -60,7 +61,16 @@ public class WaitingForFoodState extends CustomerPatienceState {
         return null;
     }
 
-    public void addBonuses() {
+    public void addBonuses(ItemStack foodStack) {
         customer.addHappiness(getSecondsRemaining() / 2);
+        FreshnessData freshnessData = new FreshnessData(foodStack);
+        if(freshnessData.exists()){
+            int age = freshnessData.getAgeSeconds(customer.level);
+            if(age < 23){
+                customer.addHappiness(20);
+            }else{
+                customer.addHappiness(5);
+            }
+        }
     }
 }

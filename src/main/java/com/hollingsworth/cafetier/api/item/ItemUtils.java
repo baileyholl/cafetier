@@ -1,6 +1,7 @@
 package com.hollingsworth.cafetier.api.item;
 
 import com.hollingsworth.cafetier.api.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +28,7 @@ public class ItemUtils {
             return stack;
         }
         Cafe cafe = game.cafe;
+        // Adds a roughly 8 second leeway to the freshness of the item so items will continue to stack.
         long currentGameTime = level.getGameTime();
         long previousStamp = CRAFT_TIMESTAMPS.computeIfAbsent(cafe.cafeUUID, uuid -> currentGameTime);
         boolean outdated = currentGameTime - previousStamp > STAMP_LEEWAY;
@@ -41,6 +43,7 @@ public class ItemUtils {
         if(stack.hasTag() && stack.getTag().contains(FreshnessData.TAG)) {
             FreshnessData freshnessData = new FreshnessData(stack);
             tooltip.add(Component.literal("Freshness: " + freshnessData.getCreatedStamp()));
+            tooltip.add(Component.literal("Age" + freshnessData.getAgeSeconds(Minecraft.getInstance().level)));
         }
         return tooltip;
     }
